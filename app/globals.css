@@ -359,3 +359,11 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   body::after, .hero-beam, .reel-beam, .reel-art svg, .dot, .scroll-cue i::after { animation: none; }
   .line { visibility: visible; }
 }
+
+/* ---------- Failsafe: kalau JS gagal jalan (mis. iOS lama), halaman tetap terbuka ---------- */
+.pre { animation: failsafe-pre 0.01s linear 8s forwards; }
+.nav { animation: failsafe-nav 0.01s linear 8s forwards; }
+.line { animation: failsafe-show 0.01s linear 8s forwards; }
+@keyframes failsafe-pre { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+@keyframes failsafe-nav { to { opacity: 1; } }
+@keyframes failsafe-show { to { visibility: visible; } }
