@@ -11,6 +11,14 @@ const PIE = 2 * Math.PI * 24; // keliling lingkaran "pie" (r = 24, stroke 48 = i
 // 60 garis skala melingkar; tiap kelima lebih panjang
 const TICKS = Array.from({ length: 60 }, (_, i) => ({ angle: i * 6, long: i % 5 === 0 }));
 
+// Tandai preloader sudah tampil (sesi ini), supaya tidak diulang saat kembali dari halaman project
+function markSeen() {
+  try {
+    sessionStorage.setItem("pre-seen", "1");
+  } catch (e) {}
+  document.documentElement.classList.add("pre-seen");
+}
+
 /**
  * Film leader klasik: angka 3-2-1 di dalam dial, garis sapuan berputar tiap detik,
  * lalu satu kilatan putih membuka halaman.
@@ -26,6 +34,12 @@ export default function Preloader({ onDone }) {
   done.current = onDone; // selalu versi terbaru, tanpa memicu ulang timeline
 
   useEffect(() => {
+    // Sudah pernah tampil: langsung buka (class pre-seen sudah menyembunyikan .pre lewat CSS)
+    if (document.documentElement.classList.contains("pre-seen")) {
+      done.current();
+      return;
+    }
+
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const ctx = gsap.context(() => {
@@ -36,7 +50,8 @@ export default function Preloader({ onDone }) {
           .call(() => { num.current.textContent = "1"; })
           .to(root.current, { opacity: 0, duration: 0.4, delay: 0.5 })
           .call(() => done.current())
-          .set(root.current, { display: "none" });
+          .set(root.current, { display: "none" })
+          .call(markSeen);
         return;
       }
 
@@ -57,7 +72,8 @@ export default function Preloader({ onDone }) {
         .set(root.current, { backgroundColor: "rgba(5,5,5,0)" })
         .call(() => done.current())
         .to(flash.current, { opacity: 0, duration: 1.1, ease: "power2.out" })
-        .set(root.current, { display: "none" });
+        .set(root.current, { display: "none" })
+        .call(markSeen);
     }, root);
 
     return () => ctx.revert();

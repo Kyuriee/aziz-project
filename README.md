@@ -25,3 +25,8 @@ Placeholder visual proyek ada di `components/Frame.jsx` — ganti dengan <img> a
 
 ## Foto
 Ganti `public/portrait.jpg` (rasio potret). Foto dengan latar terang paling menyatu dengan hero.
+
+## Tambah project baru (halaman sendiri per brand)
+1. Taruh foto di `public/work/<slug>/` (webp, lebar maks ~2000px).
+2. Di `data/site.js`: tambah item di `works` (isi `slug` + `cover`), lalu salin blok di `cases` dengan slug yang sama.
+3. Halaman otomatis ada di `/work/<slug>/`. Item `works` tanpa `slug` masih placeholder.

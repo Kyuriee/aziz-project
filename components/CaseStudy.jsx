@@ -1,0 +1,124 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SmoothScroll from "./SmoothScroll";
+import Cursor from "./Cursor";
+import Roll from "./Roll";
+import { ArrowLeft } from "./Icon";
+import { site } from "@/data/site";
+
+gsap.registerPlugin(ScrollTrigger);
+
+/** Halaman satu project/brand. Data dari `cases` di data/site.js. */
+export default function CaseStudy({ data }) {
+  const root = useRef(null);
+  const meta = [
+    { label: "Type", value: data.kind },
+    { label: "Year", value: data.year },
+    { label: "Role", value: data.role },
+  ];
+
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const ctx = gsap.context(() => {
+      gsap.set(".case .line", { visibility: "visible" });
+      if (reduced) return;
+
+      gsap.set(".case .line", { yPercent: 110 });
+      gsap
+        .timeline({ delay: 0.15 })
+        .to(".case .line", { yPercent: 0, duration: 1.3, stagger: 0.12, ease: "expo.out" })
+        .fromTo(".case-hero-img", { opacity: 0, scale: 1.05 }, { opacity: 1, scale: 1, duration: 1.6, ease: "expo.out" }, 0)
+        .from(".case-fade", { opacity: 0, y: 16, duration: 0.9, stagger: 0.1, ease: "power3.out" }, 0.6);
+
+      // Tiap foto galeri muncul saat masuk layar
+      gsap.utils.toArray(".shot").forEach((shot) => {
+        gsap.from(shot, {
+          opacity: 0,
+          y: 60,
+          duration: 1.3,
+          ease: "expo.out",
+          scrollTrigger: { trigger: shot, start: "top 88%" },
+        });
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <SmoothScroll locked={false}>
+      <Cursor />
+      <div className="case" ref={root}>
+        <header className="nav is-static mono">
+          <Link href="/" className="nav-logo" data-cursor="Home">
+            {site.name}
+          </Link>
+          <span className="nav-count">{data.title.join(" ")}</span>
+          <div className="nav-right">
+            <Link href="/#work" className="nav-back" data-cursor="Back">
+              <ArrowLeft />
+              <Roll>Work</Roll>
+            </Link>
+          </div>
+        </header>
+
+        <main>
+          <section className="case-hero">
+            <div className="case-hero-text">
+              <h1 className="case-title" aria-label={data.title.join(" ")}>
+                <span className="mask">
+                  <span className="line case-line-1" aria-hidden="true">{data.title[0]}</span>
+                </span>
+                <span className="mask">
+                  <span className="line case-line-2" aria-hidden="true">{data.title[1]}</span>
+                </span>
+              </h1>
+
+              <p className="case-brief case-fade">{data.brief}</p>
+
+              <dl className="case-meta mono case-fade">
+                {meta.map((m) => (
+                  <div key={m.label}>
+                    <dt>{m.label}</dt>
+                    <dd>{m.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <img
+              className="case-hero-img"
+              src={data.hero.src}
+              width={data.hero.width}
+              height={data.hero.height}
+              alt={data.hero.alt}
+              fetchPriority="high"
+              decoding="async"
+            />
+          </section>
+
+          <section className="case-gallery" aria-label="Frames">
+            {data.shots.map((shot) => (
+              <figure className={`shot shot-${shot.slot}`} key={shot.src}>
+                <img src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} loading="lazy" decoding="async" />
+              </figure>
+            ))}
+          </section>
+        </main>
+
+        <footer className="case-foot">
+          <Link href="/#work" className="case-back" data-cursor="Back">
+            <ArrowLeft />
+            <span>All work</span>
+          </Link>
+          <p className="mono">© {site.year} {site.name}</p>
+        </footer>
+      </div>
+    </SmoothScroll>
+  );
+}

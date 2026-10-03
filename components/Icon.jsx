@@ -14,3 +14,11 @@ export function ArrowUp({ size = "1em" }) {
     </svg>
   );
 }
+
+export function ArrowLeft({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" aria-hidden="true">
+      <path d="M20 12H5M11 6l-6 6 6 6" />
+    </svg>
+  );
+}

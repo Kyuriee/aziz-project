@@ -25,6 +25,9 @@ const debugScript = String.raw`(function () {
   });
 })();`;
 
+// Jalan sebelum paint: kalau preloader sudah tampil di sesi ini, sembunyikan langsung
+const seenScript = "try{if(sessionStorage.getItem('pre-seen'))document.documentElement.classList.add('pre-seen')}catch(e){}";
+
 export const metadata = {
   title: site.title,
   description: site.description,
@@ -34,9 +37,10 @@ export const viewport = { themeColor: "#050505" };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
         {/* Tambah ?debug di URL: error JS tampil di layar (berguna untuk iPhone tanpa Mac) */}
+        <script dangerouslySetInnerHTML={{ __html: seenScript }} />
         <script dangerouslySetInnerHTML={{ __html: debugScript }} />
         <noscript>
           <style>{`.line, .pre{visibility:visible!important} .pre{display:none}`}</style>

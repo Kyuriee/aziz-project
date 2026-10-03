@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
 import Frame from "./Frame";
 import { ArrowUpRight } from "./Icon";
 import { site } from "@/data/site";
@@ -88,7 +89,7 @@ export default function Works() {
       >
         {site.works.map((work, i) => (
           <li className="work" key={work.title} onPointerEnter={() => setActive(i)}>
-            <a href={work.href} data-cursor="View">
+            <Link href={work.slug ? `/work/${work.slug}/` : work.href} data-cursor="View">
               <span className="work-idx mono">{String(i + 1).padStart(2, "0")}</span>
               <span className="work-ttl-wrap">
                 <span className="work-title">
@@ -101,7 +102,7 @@ export default function Works() {
                 {work.year}
               </span>
               <span className="work-arrow" aria-hidden="true"><ArrowUpRight size="1.6rem" /></span>
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
@@ -109,7 +110,7 @@ export default function Works() {
       <div className="preview" ref={preview} aria-hidden="true" style={{ clipPath: HIDDEN }}>
         {site.works.map((work, i) => (
           <div className="frame" key={work.title} data-on={active === i}>
-            <Frame variant={work.variant} />
+            {work.cover ? <img className="frame-photo" src={work.cover} alt="" /> : <Frame variant={work.variant} />}
           </div>
         ))}
       </div>

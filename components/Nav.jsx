@@ -3,23 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useLenis } from "./SmoothScroll";
+import Roll from "./Roll";
 import { site } from "@/data/site";
 
 const SECTION_IDS = site.nav.map((item) => item.href.slice(1));
 const HIDE_AFTER = 160; // px scroll sebelum nav boleh menghilang
 const easeOut = (t) => 1 - Math.pow(1 - t, 4);
-
-/** Teks yang "berguling" saat hover: salinan kedua naik menggantikan yang pertama. */
-function Roll({ children }) {
-  return (
-    <span className="roll">
-      <span className="roll-in">
-        <span>{children}</span>
-        <span aria-hidden="true">{children}</span>
-      </span>
-    </span>
-  );
-}
 
 export default function Nav({ ready }) {
   const lenis = useLenis();
@@ -41,6 +30,14 @@ export default function Nav({ ready }) {
     if (!ready) return;
     gsap.to(header.current, { opacity: 1, y: 0, duration: 1, ease: "expo.out", delay: 0.6 });
   }, [ready]);
+
+  /* ---------- Kembali dari halaman project: lompat ke section di URL (#work) ---------- */
+  useEffect(() => {
+    if (!ready || !lenis || !window.location.hash) return;
+    const id = window.location.hash;
+    const t = setTimeout(() => lenis.scrollTo(id, { immediate: true }), 150);
+    return () => clearTimeout(t);
+  }, [ready, lenis]);
 
   /* ---------- Smart hide: turun saat scroll ke atas, naik saat scroll ke bawah ---------- */
   const setHidden = useCallback((hide) => {

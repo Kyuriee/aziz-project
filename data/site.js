@@ -1,13 +1,13 @@
 // Semua konten portofolio ada di sini. Ganti sesuai kebutuhan — komponen tidak perlu disentuh.
 export const site = {
   name: "Aziz Zulhakim",
-  role: "Digital Creative",
+  role: "Marketing Communication",
   year: 2026,
   email: "zulhakimaziz778@gmail.com",
   phone: "0895372691601",
   location: "Indonesia",
   status: "Open for work",
-  title: "Aziz Zulhakim — Digital Creative",
+  title: "Aziz Zulhakim — Marketing Communication",
   description: "Brand stories, campaigns, and conversations that stick.",
 
   portrait: { src: "/portrait.jpg", width: 770, height: 1368, alt: "Black-and-white portrait of Aziz Zulhakim in a black tuxedo with an untied bow tie" },
@@ -22,7 +22,9 @@ export const site = {
 
   // variant = pola visual abstrak (lihat components/Frame.jsx) — ganti dengan gambar asli nanti
   // CATATAN: nama proyek di bawah masih placeholder.
+  // slug + cover = punya halaman sendiri (lihat `cases` di bawah). Tanpa slug = placeholder.
   works: [
+    { slug: "bintang-zero", title: "Bintang Zero", kind: "Product Visual", year: "2026", variant: 0, cover: "/work/bintang-zero/final.webp", href: "#work" },
     { title: "Lumen", kind: "Brand Campaign", year: "2026", variant: 0, href: "#work" },
     { title: "Northbound", kind: "Launch Strategy", year: "2025", variant: 1, href: "#work" },
     { title: "Common Ground", kind: "Content & Social", year: "2025", variant: 2, href: "#work" },
@@ -53,4 +55,23 @@ export const site = {
     { label: "WhatsApp", href: "https://wa.me/62895372691601" },
     { label: "Email", href: "mailto:zulhakimaziz778@gmail.com" },
   ],
+};
+
+// Halaman project. Tambah brand baru: taruh foto di public/work/<slug>/, lalu salin blok ini.
+// CATATAN: tahun, peran, dan kalimat brief masih placeholder — sesuaikan.
+export const cases = {
+  "bintang-zero": {
+    title: ["Bintang", "Zero 0.0"],
+    kind: "Product Visual",
+    year: "2026",
+    role: "Visual & Content",
+    brief: "Low-key light. Cold condensation. One red star.",
+    hero: { src: "/work/bintang-zero/final.webp", width: 1100, height: 1954, alt: "Bintang Zero 0.0 can covered in condensation, lit from the front against a black background" },
+    // slot 1-3 menentukan posisi di galeri (lihat .shot-1/2/3 di globals.css)
+    shots: [
+      { slot: 1, src: "/work/bintang-zero/01.webp", width: 1100, height: 1955, alt: "Bintang Zero 0.0 can, portrait frame with soft front light" },
+      { slot: 2, src: "/work/bintang-zero/02.webp", width: 2000, height: 1125, alt: "Bintang Zero 0.0 can emerging from darkness, low-key frame" },
+      { slot: 3, src: "/work/bintang-zero/03.webp", width: 2000, height: 1125, alt: "Bintang Zero 0.0 can in near darkness, wide low-key frame" },
+    ],
+  },
 };
