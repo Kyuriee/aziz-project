@@ -1,4 +1,4 @@
-# Portfolio — Zulhakim Aziz (Marketing Communication)
+# Portfolio — Aziz Zulhakim (Marketing Communication)
 
 Next.js (static export) + GSAP + Lenis. Tema hitam-putih sinematik.
 
@@ -15,7 +15,7 @@ Semua teks, nama, proyek, email, dan sosmed ada di `data/site.js`.
 Placeholder visual proyek ada di `components/Frame.jsx` — ganti dengan <img> asli kalau sudah ada.
 
 ## Struktur
-- `components/Preloader.jsx` — nama outline terisi dari bawah + kilatan kamera
+- `components/Preloader.jsx` — film leader 3-2-1 + kilatan kamera
 - `components/Hero.jsx` — foto (multiply) + judul kinetik (SplitText, blend difference)
 - `components/Marquee.jsx` — teks raksasa, kecepatan ikut velocity scroll
 - `components/Works.jsx` — daftar proyek + preview mengikuti kursor

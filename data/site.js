@@ -1,17 +1,16 @@
 // Semua konten portofolio ada di sini. Ganti sesuai kebutuhan — komponen tidak perlu disentuh.
 export const site = {
-  name: "Zulhakim Aziz",
-  firstName: "Zulhakim",
+  name: "Aziz Zulhakim",
   role: "Marketing Communication",
   year: 2026,
   email: "zulhakimaziz778@gmail.com",
   phone: "0895372691601",
   location: "Indonesia",
   status: "Open for work",
-  title: "Zulhakim Aziz — Marketing Communication",
+  title: "Aziz Zulhakim — Marketing Communication",
   description: "Brand stories, campaigns, and conversations that stick.",
 
-  portrait: { src: "/portrait.jpg", width: 770, height: 1368, alt: "Black-and-white portrait of Zulhakim Aziz in a black tuxedo with an untied bow tie" },
+  portrait: { src: "/portrait.jpg", width: 770, height: 1368, alt: "Black-and-white portrait of Aziz Zulhakim in a black tuxedo with an untied bow tie" },
 
   nav: [
     { label: "Work", href: "#work" },

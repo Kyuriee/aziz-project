@@ -49,11 +49,11 @@ export default function Hero({ ready }) {
 
       intro.current = gsap
         .timeline({ paused: true })
-        // Foto "terpapar" cahaya blitz lalu mengendap ke tonalitas aslinya
+        // Foto muncul pelan seperti cetakan yang "jadi" (tanpa filter, aman di Safari)
         .fromTo(
           ".hero-photo",
-          { opacity: 0, scale: 1.07, filter: "brightness(2.4) contrast(0.6)" },
-          { opacity: 1, scale: 1, filter: "brightness(1) contrast(1)", duration: 2, ease: "expo.out" },
+          { opacity: 0, scale: 1.05 },
+          { opacity: 1, scale: 1, duration: 1.8, ease: "expo.out" },
           0
         )
         .to(splitA.chars, { yPercent: 0, rotate: 0, duration: 1.3, stagger: 0.05, ease: "expo.out" }, 0.25)
@@ -62,12 +62,11 @@ export default function Hero({ ready }) {
 
       if (readyRef.current) intro.current.play();
 
-      // Baris judul bergeser berlawanan arah, foto bergerak lebih lambat dari halaman
+      // Baris judul bergeser berlawanan arah
       const scrub = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
       gsap.to(".mask-1", { xPercent: -8, ease: "none", scrollTrigger: scrub });
       gsap.to(".mask-2", { xPercent: 8, ease: "none", scrollTrigger: scrub });
       gsap.to(".mask-3", { xPercent: -5, ease: "none", scrollTrigger: scrub });
-      gsap.to(".hero-photo-wrap", { yPercent: 10, ease: "none", scrollTrigger: scrub });
     }, root);
 
     return () => {
@@ -84,15 +83,18 @@ export default function Hero({ ready }) {
   return (
     <section className="hero is-light" id="top" ref={root}>
       <div className="hero-photo-wrap">
-        <img
-          className="hero-photo"
-          src={site.portrait.src}
-          width={site.portrait.width}
-          height={site.portrait.height}
-          alt={site.portrait.alt}
-          fetchPriority="high"
-          decoding="async"
-        />
+        <div className="hero-photo-frame">
+          <img
+            className="hero-photo"
+            src={site.portrait.src}
+            width={site.portrait.width}
+            height={site.portrait.height}
+            alt={site.portrait.alt}
+            fetchPriority="high"
+            decoding="async"
+          />
+          <i className="hero-photo-fade" aria-hidden="true" />
+        </div>
       </div>
 
       <div className="hero-meta mono">

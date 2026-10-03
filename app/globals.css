@@ -71,33 +71,23 @@ body::after {
   100% { transform: translate(0, 0); }
 }
 
-/* ---------- Preloader ---------- */
-.pre { position: fixed; inset: 0; z-index: 100; pointer-events: all; }
-.pre-bar { position: absolute; left: 0; width: 100%; height: 50.2%; background: var(--ink); }
-.pre-bar-top { top: 0; }
-.pre-bar-bot { bottom: 0; }
-.pre-ui {
-  position: absolute; inset: 0; z-index: 2;
-  display: flex; flex-direction: column; justify-content: space-between;
-  padding: var(--pad);
-}
-.pre-top { display: flex; justify-content: space-between; color: var(--mute); }
+/* Grain statis di layar sentuh: lebih ringan untuk iOS */
+@media (hover: none) and (pointer: coarse) { body::after { animation: none; inset: 0; } }
 
-/* Nama outline + isian yang naik dari bawah */
-.pre-word {
-  position: relative; align-self: flex-start;
-  font-family: var(--sans-outline); font-weight: 800; text-transform: uppercase;
-  font-size: clamp(3rem, 17vw, 18rem); line-height: 0.8; letter-spacing: -0.03em; white-space: nowrap;
-  padding: 0.04em 0.06em 0.02em 0;
+/* ---------- Preloader (film leader) ---------- */
+.pre { position: fixed; inset: 0; z-index: 100; background: var(--ink); color: var(--paper); pointer-events: all; }
+.pre-frame { position: absolute; inset: 0; }
+.pre-stage { position: absolute; inset: 0; display: grid; place-items: center; }
+.pre-dial { position: relative; width: min(78vmin, 880px); height: min(78vmin, 880px); }
+.pre-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.pre-num {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: clamp(7rem, 30vmin, 22rem); line-height: 1; padding-top: 0.04em;
+  font-variant-numeric: lining-nums;
 }
-.pre-word-out { display: block; color: transparent; -webkit-text-stroke: 1px rgba(243, 243, 241, 0.4); }
-.pre-word-fill {
-  position: absolute; inset: 0; display: block; color: var(--paper);
-  padding: inherit; clip-path: inset(100% 0 0 0);
-}
-.pre-edge { position: absolute; left: 0; right: 0; top: 100%; height: 1px; background: var(--paper); }
+.pre-ui { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: var(--pad); color: var(--mute); }
+.pre-row { display: flex; justify-content: space-between; }
 .pre-flash { position: absolute; inset: 0; z-index: 3; background: #fff; opacity: 0; pointer-events: none; }
-.pre-count { align-self: flex-end; font-variant-numeric: tabular-nums; color: var(--mute); }
 
 /* ---------- Nav ---------- */
 .nav {
@@ -175,14 +165,17 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   padding: 6rem var(--pad) var(--pad);
   overflow: hidden;
 }
-/* Foto: putihnya melebur ke warna halaman lewat multiply, sisanya hitam tetap hitam */
-.hero-photo-wrap { position: absolute; inset: 0; z-index: -1; display: flex; justify-content: center; align-items: flex-end; padding-left: 14vw; }
-.hero-photo {
-  height: 100%; width: auto; max-width: none; mix-blend-mode: multiply; user-select: none; -webkit-user-drag: none;
-  /* Tepi foto dilunakkan supaya lebur ke latar kertas */
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 13%, #000 87%, transparent), linear-gradient(to bottom, transparent, #000 14%);
-  mask-image: linear-gradient(to right, transparent, #000 13%, #000 87%, transparent), linear-gradient(to bottom, transparent, #000 14%);
-  -webkit-mask-composite: source-in; mask-composite: intersect;
+/* Foto: putihnya melebur ke warna halaman lewat multiply.
+   Jangan beri z-index/transform pada leluhur .hero-photo, karena itu memutus blend. */
+.hero-photo-wrap { position: absolute; inset: 0; display: flex; justify-content: center; align-items: flex-end; padding-left: 14vw; }
+.hero-photo-frame { position: relative; height: 100%; }
+.hero-photo { display: block; height: 100%; width: auto; max-width: none; mix-blend-mode: multiply; user-select: none; -webkit-user-drag: none; }
+/* Tepi foto dilunakkan dengan gradient latar (bukan mask, supaya aman di Safari) */
+.hero-photo-fade {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to right, #f3f3f1 0%, rgba(243, 243, 241, 0) 14%, rgba(243, 243, 241, 0) 86%, #f3f3f1 100%),
+    linear-gradient(to bottom, #f3f3f1 0%, rgba(243, 243, 241, 0) 12%);
 }
 
 .hero-meta {
@@ -351,6 +344,7 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   .menu-btn { display: inline-flex; }
   .hero-meta { grid-template-columns: 1fr 1fr; top: 5rem; }
   .hero-photo-wrap { padding-left: 0; }
+  .hero-photo-fade { display: none; }
   .line-b { font-size: 0.38em; }
   .hero-meta > :nth-child(2) { display: none; }
   .hero-foot { flex-direction: column; align-items: flex-start; }
