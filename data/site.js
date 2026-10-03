@@ -1,13 +1,13 @@
 // Semua konten portofolio ada di sini. Ganti sesuai kebutuhan — komponen tidak perlu disentuh.
 export const site = {
   name: "Aziz Zulhakim",
-  role: "Marketing Communication",
+  role: "Digital Creative",
   year: 2026,
   email: "zulhakimaziz778@gmail.com",
   phone: "0895372691601",
   location: "Indonesia",
   status: "Open for work",
-  title: "Aziz Zulhakim — Marketing Communication",
+  title: "Aziz Zulhakim — Digital Creative",
   description: "Brand stories, campaigns, and conversations that stick.",
 
   portrait: { src: "/portrait.jpg", width: 770, height: 1368, alt: "Black-and-white portrait of Aziz Zulhakim in a black tuxedo with an untied bow tie" },
