@@ -27,11 +27,6 @@ export const site = {
     { slug: "bintang-zero", title: "Bintang Zero", kind: "Product Visual", year: "2026", variant: 0, cover: "/work/bintang-zero/final.webp", href: "#work" },
     { slug: "heiu", title: "HEIU", kind: "Apparel Shoot", year: "2021", variant: 1, cover: "/work/heiu/hero.webp", href: "#work" },
     { slug: "nez-coffeeneatery", title: "Nez", kind: "Café Content", year: "2022", variant: 2, cover: "/work/nez-coffeeneatery/hero.webp", href: "#work" },
-    { title: "Lumen", kind: "Brand Campaign", year: "2026", variant: 0, href: "#work" },
-    { title: "Northbound", kind: "Launch Strategy", year: "2025", variant: 1, href: "#work" },
-    { title: "Common Ground", kind: "Content & Social", year: "2025", variant: 2, href: "#work" },
-    { title: "Quiet Riot", kind: "Public Relations", year: "2024", variant: 3, href: "#work" },
-    { title: "Open House", kind: "Event Activation", year: "2024", variant: 4, href: "#work" },
   ],
 
   reel: { caption: "Stories that move.", sub: "Campaign reel 2024 — 2026" },
