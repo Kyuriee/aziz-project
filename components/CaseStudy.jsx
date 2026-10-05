@@ -53,7 +53,7 @@ export default function CaseStudy({ data }) {
   return (
     <SmoothScroll locked={false}>
       <Cursor />
-      <div className="case" ref={root}>
+      <div className={`case${data.theme === "light" ? " is-light" : ""}`} ref={root}>
         <header className="nav is-static mono">
           <Link href="/" className="nav-logo" data-cursor="Home">
             {site.name}
@@ -102,7 +102,7 @@ export default function CaseStudy({ data }) {
             />
           </section>
 
-          <section className="case-gallery" aria-label="Frames">
+          <section className={`case-gallery${data.layout === "portraits" ? " case-gallery--portraits" : ""}`} aria-label="Frames">
             {data.shots.map((shot) => (
               <figure className={`shot shot-${shot.slot}`} key={shot.src}>
                 <img src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} loading="lazy" decoding="async" />

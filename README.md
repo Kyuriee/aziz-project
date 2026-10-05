@@ -30,3 +30,5 @@ Ganti `public/portrait.jpg` (rasio potret). Foto dengan latar terang paling meny
 1. Taruh foto di `public/work/<slug>/` (webp, lebar maks ~2000px).
 2. Di `data/site.js`: tambah item di `works` (isi `slug` + `cover`), lalu salin blok di `cases` dengan slug yang sama.
 3. Halaman otomatis ada di `/work/<slug>/`. Item `works` tanpa `slug` masih placeholder.
+4. Opsional di `cases`: `layout: "portraits"` untuk galeri 4 foto potret (default: 3 foto, slot 1-3).
+5. Opsional di `cases`: `theme: "light"` untuk halaman berlatar terang (cocok untuk foto high-key).

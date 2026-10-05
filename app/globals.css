@@ -404,6 +404,11 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .shot-1 { grid-column: 1 / 6; }
 .shot-2 { grid-column: 6 / -1; margin-top: clamp(5rem, 16vw, 16rem); }
 .shot-3 { grid-column: 1 / -1; }
+/* Varian 4 foto potret: dua baris, kolom kanan turun, tidak sejajar */
+.case-gallery--portraits .shot-1 { grid-column: 1 / 6; }
+.case-gallery--portraits .shot-2 { grid-column: 7 / -1; margin-top: clamp(5rem, 14vw, 14rem); }
+.case-gallery--portraits .shot-3 { grid-column: 2 / 7; }
+.case-gallery--portraits .shot-4 { grid-column: 8 / -1; margin-top: clamp(5rem, 14vw, 14rem); }
 
 .case-foot {
   display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem;
@@ -421,5 +426,5 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 @media (max-width: 820px) {
   .case-hero { grid-template-columns: 1fr; align-items: start; }
   .case-hero-img { height: auto; width: 100%; justify-self: stretch; }
-  .shot-1, .shot-2, .shot-3 { grid-column: 1 / -1; margin-top: 0; }
+  .case-gallery .shot { grid-column: 1 / -1 !important; margin-top: 0 !important; }
 }

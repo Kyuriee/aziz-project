@@ -25,6 +25,8 @@ export const site = {
   // slug + cover = punya halaman sendiri (lihat `cases` di bawah). Tanpa slug = placeholder.
   works: [
     { slug: "bintang-zero", title: "Bintang Zero", kind: "Product Visual", year: "2026", variant: 0, cover: "/work/bintang-zero/final.webp", href: "#work" },
+    { slug: "heiu", title: "HEIU", kind: "Apparel Shoot", year: "2021", variant: 1, cover: "/work/heiu/hero.webp", href: "#work" },
+    { slug: "nez-coffeeneatery", title: "Nez", kind: "Café Content", year: "2022", variant: 2, cover: "/work/nez-coffeeneatery/hero.webp", href: "#work" },
     { title: "Lumen", kind: "Brand Campaign", year: "2026", variant: 0, href: "#work" },
     { title: "Northbound", kind: "Launch Strategy", year: "2025", variant: 1, href: "#work" },
     { title: "Common Ground", kind: "Content & Social", year: "2025", variant: 2, href: "#work" },
@@ -72,6 +74,37 @@ export const cases = {
       { slot: 1, src: "/work/bintang-zero/01.webp", width: 1100, height: 1955, alt: "Bintang Zero 0.0 can, portrait frame with soft front light" },
       { slot: 2, src: "/work/bintang-zero/02.webp", width: 2000, height: 1125, alt: "Bintang Zero 0.0 can emerging from darkness, low-key frame" },
       { slot: 3, src: "/work/bintang-zero/03.webp", width: 2000, height: 1125, alt: "Bintang Zero 0.0 can in near darkness, wide low-key frame" },
+    ],
+  },
+  heiu: {
+    title: ["Heiu", "Lookbook"],
+    kind: "Apparel Shoot",
+    year: "2021", // dari tanggal file foto; sesuaikan
+    role: "Visual & Content",
+    brief: "Night flash. Red gothic print on sand cotton.",
+    layout: "portraits", // 4 foto potret: lihat .case-gallery--portraits di globals.css
+    hero: { src: "/work/heiu/hero.webp", width: 1023, height: 1531, alt: "Back of a sand-colored tee printed with a red barcode and the words forgive me, HEIU" },
+    shots: [
+      { slot: 1, src: "/work/heiu/01.webp", width: 930, height: 1392, alt: "Model in a sand tee with a small red HEIU logo, against a white wall" },
+      { slot: 2, src: "/work/heiu/02.webp", width: 1080, height: 1616, alt: "Close-up of the red gothic HEIU logo on the chest of a sand tee" },
+      { slot: 3, src: "/work/heiu/03.webp", width: 1080, height: 1616, alt: "Model in profile at night on concrete stairs, wearing the HEIU tee" },
+      { slot: 4, src: "/work/heiu/04.webp", width: 1080, height: 1616, alt: "Model facing the camera at night on concrete stairs, wearing the HEIU tee" },
+    ],
+  },
+  "nez-coffeeneatery": {
+    title: ["Nez", "Coffeeneatery"],
+    kind: "Café Content",
+    year: "2022", // dari tanggal file foto; sesuaikan
+    role: "Visual & Content",
+    brief: "Soft daylight. White marble, ice, warm cups.",
+    theme: "light", // foto terang: halaman memakai latar kertas
+    layout: "portraits",
+    hero: { src: "/work/nez-coffeeneatery/hero.webp", width: 1100, height: 1375, alt: "Three iced drinks with the NEZ logo on white podiums, the center one orange and clear" },
+    shots: [
+      { slot: 1, src: "/work/nez-coffeeneatery/01.webp", width: 1100, height: 1650, alt: "Barista pouring espresso over milk and ice into a cup" },
+      { slot: 2, src: "/work/nez-coffeeneatery/02.webp", width: 1100, height: 1650, alt: "Latte with leaf art in a black cup on white marble with coffee beans" },
+      { slot: 3, src: "/work/nez-coffeeneatery/03.webp", width: 1100, height: 1650, alt: "Layered iced coffee in a glass on a wooden coaster" },
+      { slot: 4, src: "/work/nez-coffeeneatery/04.webp", width: 1100, height: 1650, alt: "Iced milk coffee in a NEZ cup on a white podium" },
     ],
   },
 };
