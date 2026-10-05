@@ -105,7 +105,7 @@ export default function Preloader({ onDone }) {
 
         <div className="pre-ui mono">
           <div className="pre-row">
-            <span>Portfolio</span>
+            <span>{site.name}</span>
             <span>© {site.year}</span>
           </div>
           <div className="pre-row">

@@ -32,3 +32,4 @@ Ganti `public/portrait.jpg` (rasio potret). Foto dengan latar terang paling meny
 3. Halaman otomatis ada di `/work/<slug>/`. Item `works` tanpa `slug` masih placeholder.
 4. Opsional di `cases`: `layout: "portraits"` untuk galeri 4 foto potret (default: 3 foto, slot 1-3).
 5. Opsional di `cases`: `theme: "light"` untuk halaman berlatar terang (cocok untuk foto high-key).
+6. Opsional di `cases`: `palette: { bg, fg, mute, line, accent }` untuk warna halaman sendiri (dipakai halaman project dan efek warna di daftar Work).

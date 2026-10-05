@@ -98,7 +98,7 @@ export default function Hero({ ready }) {
       </div>
 
       <div className="hero-meta mono">
-        <span className="hero-fade">Portfolio © {site.year}</span>
+        <span className="hero-fade">© {site.year}</span>
         <span className="hero-fade">
           <i className="dot" />
           {site.status}

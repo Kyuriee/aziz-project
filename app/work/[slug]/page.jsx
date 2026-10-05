@@ -23,5 +23,5 @@ export default async function WorkPage({ params }) {
   const { slug } = await params;
   const item = cases[slug];
   if (!item) notFound();
-  return <CaseStudy data={item} />;
+  return <CaseStudy slug={slug} data={item} />;
 }

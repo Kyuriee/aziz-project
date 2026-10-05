@@ -6,18 +6,24 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import Frame from "./Frame";
 import { ArrowUpRight } from "./Icon";
-import { site } from "@/data/site";
+import { cases, site } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const HIDDEN = "inset(50% 50% 50% 50%)";
 const SHOWN = "inset(0% 0% 0% 0%)";
 
+// Palet brand milik work ke-i (null kalau tidak ada)
+const brandOf = (work) => cases[work?.slug]?.palette ?? null;
+const paletteVars = (p) =>
+  p ? { "--ink": p.bg, "--paper": p.fg, "--mute": p.mute, "--line": p.line } : undefined;
+
 export default function Works() {
   const root = useRef(null);
   const preview = useRef(null);
   const follow = useRef(null);
   const [active, setActive] = useState(0);
+  const [palette, setPalette] = useState(null); // palet brand yang sedang aktif
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -41,12 +47,28 @@ export default function Works() {
         });
       });
 
-      // Preview mengikuti kursor (hanya pointer halus)
       if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        // Preview mengikuti kursor (hanya pointer halus)
         follow.current = {
           x: gsap.quickTo(preview.current, "x", { duration: 0.7, ease: "power3" }),
           y: gsap.quickTo(preview.current, "y", { duration: 0.7, ease: "power3" }),
         };
+      } else {
+        // Layar sentuh: warna mengikuti baris yang sedang di tengah layar
+        site.works.forEach((work, i) => {
+          ScrollTrigger.create({
+            trigger: root.current.querySelectorAll(".work")[i],
+            start: "top 55%",
+            end: "bottom 55%",
+            onToggle: (self) => self.isActive && setPalette(brandOf(work)),
+          });
+        });
+        ScrollTrigger.create({
+          trigger: root.current.querySelector(".works-list"),
+          start: "top 55%",
+          end: "bottom 55%",
+          onToggle: (self) => !self.isActive && setPalette(null),
+        });
       }
     }, root);
 
@@ -63,6 +85,7 @@ export default function Works() {
   };
 
   const toggle = (show) => {
+    if (!show) setPalette(null);
     if (!follow.current) return;
     gsap.to(preview.current, {
       clipPath: show ? SHOWN : HIDDEN,
@@ -73,7 +96,7 @@ export default function Works() {
   };
 
   return (
-    <section className="section" id="work" ref={root}>
+    <section className="section works-section" id="work" ref={root} style={paletteVars(palette)}>
       <div className="section-head mono">
         <span>(01) Selected campaigns</span>
         <span>
@@ -88,7 +111,14 @@ export default function Works() {
         onPointerLeave={() => toggle(false)}
       >
         {site.works.map((work, i) => (
-          <li className="work" key={work.title} onPointerEnter={() => setActive(i)}>
+          <li
+            className="work"
+            key={work.title}
+            onPointerEnter={(e) => {
+              setActive(i);
+              if (e.pointerType === "mouse") setPalette(brandOf(work));
+            }}
+          >
             <Link href={work.slug ? `/work/${work.slug}/` : work.href} data-cursor="View">
               <span className="work-idx mono">{String(i + 1).padStart(2, "0")}</span>
               <span className="work-ttl-wrap">
