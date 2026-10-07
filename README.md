@@ -1,6 +1,6 @@
-# Portfolio — Aziz Zulhakim (Marketing Communication)
+# Portfolio — Aziz Zulhakim (Digital Creative)
 
-Next.js (static export) + GSAP + Lenis. Tema hitam-putih sinematik.
+Next.js (static export) + GSAP + Lenis. Tiga disiplin: Photo, Video, Design.
 
 ## Jalankan di lokal
 ```bash
@@ -11,25 +11,15 @@ npm run start      # preview folder out/
 ```
 
 ## Ubah konten
-Semua teks, nama, proyek, email, dan sosmed ada di `data/site.js`.
-Placeholder visual proyek ada di `components/Frame.jsx` — ganti dengan <img> asli kalau sudah ada.
+Semua teks, kontak, daftar disiplin, galeri, dan palet warna ada di `data/site.js`.
 
-## Struktur
-- `components/Preloader.jsx` — film leader 3-2-1 + kilatan kamera
-- `components/Hero.jsx` — foto (multiply) + judul kinetik (SplitText, blend difference)
-- `components/Marquee.jsx` — teks raksasa, kecepatan ikut velocity scroll
-- `components/Works.jsx` — daftar proyek + preview mengikuti kursor
-- `components/Reel.jsx` — frame sinematik pinned + timecode
-- `components/About.jsx` — kata menyala mengikuti scroll
-- `components/Contact.jsx` — CTA magnetik
+- `site.works`: tiga disiplin di beranda. `status: "soon"` = belum ada karya (tampil, belum bisa dibuka).
+- `categories[slug]`: isi halaman `/work/<slug>/` (hero, foto galeri, palet warna).
+- `site.reel.frames`: foto yang berganti di section Reel.
 
-## Foto
-Ganti `public/portrait.jpg` (rasio potret). Foto dengan latar terang paling menyatu dengan hero.
+## Tambah karya ke Photo
+1. Taruh foto (webp, lebar maks ~2000px) di `public/work/photo/`.
+2. Tambah baris di `categories.photo.shots` dengan `pos` (posisi di galeri): `wide`, `pa`/`pb`, `qa`/`qb`, atau `t1`/`t2`/`t3` (lihat `.pos-*` di `app/globals.css`).
 
-## Tambah project baru (halaman sendiri per brand)
-1. Taruh foto di `public/work/<slug>/` (webp, lebar maks ~2000px).
-2. Di `data/site.js`: tambah item di `works` (isi `slug` + `cover`), lalu salin blok di `cases` dengan slug yang sama.
-3. Halaman otomatis ada di `/work/<slug>/`. Item `works` tanpa `slug` masih placeholder.
-4. Opsional di `cases`: `layout: "portraits"` untuk galeri 4 foto potret (default: 3 foto, slot 1-3).
-5. Opsional di `cases`: `theme: "light"` untuk halaman berlatar terang (cocok untuk foto high-key).
-6. Opsional di `cases`: `palette: { bg, fg, mute, line, accent }` untuk warna halaman sendiri (dipakai halaman project dan efek warna di daftar Work).
+## Aktifkan Video atau Design
+Isi `categories.video` (atau `design`) dengan `title`, `kind`, `role`, `brief`, `hero`, `shots`; lalu hapus `status: "soon"` di `site.works`. Palet `palette` sudah ada dan dipakai untuk efek warna saat hover di daftar Work.

@@ -238,7 +238,9 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   transform: scaleX(var(--s, 1)); transform-origin: left;
 }
 .work:last-child { border-bottom: 1px solid var(--line); }
-.work a {
+.work-link.is-soon { cursor: default; }
+.work-link.is-soon .work-title { opacity: 0.55; }
+.work-link {
   display: grid; grid-template-columns: 4rem 1fr auto 3rem; align-items: center; gap: 1rem;
   padding: clamp(1.25rem, 3vw, 2.4rem) 0;
   transition: padding 0.6s var(--ease), opacity 0.4s;
@@ -274,17 +276,17 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   position: absolute; inset: 0; overflow: hidden; background: #0b0b0b;
   clip-path: inset(24% 30% 24% 30%);
 }
-.reel-art { position: absolute; inset: -10%; display: grid; place-items: center; }
-.reel-art svg { width: min(140vh, 140vw); height: auto; animation: spin 80s linear infinite; opacity: 0.9; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.reel-beam { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.12) 50%, transparent 65%); animation: pass 6s ease-in-out infinite; }
-@keyframes pass { from { transform: translateX(-60%); } to { transform: translateX(60%); } }
+/* Foto reel bertumpuk; yang aktif muncul lewat opacity (aman di iOS) */
+.reel-imgs { position: absolute; inset: 0; will-change: transform; }
+.reel-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s linear; }
+.reel-img.is-on { opacity: 1; }
+.reel-shade { position: absolute; inset: 0; background: linear-gradient(rgba(5, 5, 5, 0.3), rgba(5, 5, 5, 0.5)); }
 .reel-hud { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 5.5rem var(--pad) var(--pad); }
 .reel-hud > div { display: flex; justify-content: space-between; }
 .reel-caption {
   position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
   font-family: var(--serif); font-size: clamp(3rem, 10vw, 10rem); letter-spacing: -0.03em; line-height: 0.95;
-  mix-blend-mode: difference; color: #fff; padding: 0 var(--pad);
+  color: #fff; padding: 0 var(--pad);
 }
 .reel-caption em { font-style: italic; }
 .rec::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #fff; margin-right: 0.6rem; animation: pulse 1.2s steps(2) infinite; }
@@ -348,7 +350,7 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   .line-b { font-size: 0.38em; }
   .hero-meta > :nth-child(2) { display: none; }
   .hero-foot { flex-direction: column; align-items: flex-start; }
-  .work a { grid-template-columns: 2.4rem 1fr auto; }
+  .work-link { grid-template-columns: 2.4rem 1fr auto; }
   .work-arrow { display: none; }
   .about-side, .stats { grid-column: 1 / -1; grid-row: auto; }
   .about-statement .word:first-child { margin-left: 0; }
@@ -356,7 +358,7 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body::after, .hero-beam, .reel-beam, .reel-art svg, .dot, .scroll-cue i::after { animation: none; }
+  body::after, .dot, .scroll-cue i::after { animation: none; }
   .line { visibility: visible; }
 }
 
@@ -401,14 +403,15 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   padding: clamp(4rem, 10vw, 9rem) var(--pad);
 }
 .shot img { display: block; width: 100%; height: auto; }
-.shot-1 { grid-column: 1 / 6; }
-.shot-2 { grid-column: 6 / -1; margin-top: clamp(5rem, 16vw, 16rem); }
-.shot-3 { grid-column: 1 / -1; }
-/* Varian 4 foto potret: dua baris, kolom kanan turun, tidak sejajar */
-.case-gallery--portraits .shot-1 { grid-column: 1 / 6; }
-.case-gallery--portraits .shot-2 { grid-column: 7 / -1; margin-top: clamp(5rem, 14vw, 14rem); }
-.case-gallery--portraits .shot-3 { grid-column: 2 / 7; }
-.case-gallery--portraits .shot-4 { grid-column: 8 / -1; margin-top: clamp(5rem, 14vw, 14rem); }
+/* Mosaik asimetris: tiap foto punya posisi sendiri (pos-*), bukan grid seragam */
+.pos-wide { grid-column: 1 / -1; }
+.pos-pa { grid-column: 1 / 6; }
+.pos-pb { grid-column: 7 / -1; margin-top: clamp(4rem, 12vw, 12rem); }
+.pos-qa { grid-column: 1 / 6; }
+.pos-qb { grid-column: 6 / -1; align-self: end; }
+.pos-t1 { grid-column: 1 / 5; }
+.pos-t2 { grid-column: 5 / 9; margin-top: clamp(3rem, 9vw, 9rem); }
+.pos-t3 { grid-column: 9 / -1; }
 
 .case-foot { border-top: 1px solid var(--line); }
 .case-next { display: grid; gap: 0.75rem; padding: clamp(4rem, 10vw, 9rem) var(--pad); }

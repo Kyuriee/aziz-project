@@ -1,14 +1,14 @@
 // Semua konten portofolio ada di sini. Ganti sesuai kebutuhan — komponen tidak perlu disentuh.
 export const site = {
   name: "Aziz Zulhakim",
-  role: "Marketing Communication",
+  role: "Digital Creative",
   year: 2026,
   email: "zulhakimaziz778@gmail.com",
   phone: "0895372691601",
   location: "Indonesia",
   status: "Open for work",
-  title: "Aziz Zulhakim — Marketing Communication",
-  description: "Brand stories, campaigns, and conversations that stick.",
+  title: "Aziz Zulhakim — Digital Creative",
+  description: "Photo, video, and design with a point of view.",
 
   portrait: { src: "/portrait.jpg", width: 770, height: 1368, alt: "Black-and-white portrait of Aziz Zulhakim in a black tuxedo with an untied bow tie" },
 
@@ -18,33 +18,35 @@ export const site = {
     { label: "Contact", href: "#contact" },
   ],
 
-  marquee: ["Brand", "Campaign", "Content", "Media", "Story", "Community"],
+  marquee: ["Photo", "Video", "Design", "Brand", "Story", "Motion"],
 
-  // variant = pola visual abstrak (lihat components/Frame.jsx) — ganti dengan gambar asli nanti
-  // Tiap item punya halaman sendiri (lihat `cases` di bawah): slug + cover wajib.
+  // Tiga disiplin. Punya halaman sendiri kalau `categories[slug]` berisi foto/karya.
+  // status: "soon" = belum ada karya: tampil di daftar tapi belum bisa dibuka.
+  // variant = pola visual abstrak (components/Frame.jsx) untuk preview yang belum punya cover.
   works: [
-    { slug: "bintang-zero", title: "Bintang Zero", kind: "Product Visual", year: "2026", variant: 0, cover: "/work/bintang-zero/final.webp", href: "#work" },
-    { slug: "heiu", title: "HEIU", kind: "Apparel Shoot", year: "2021", variant: 1, cover: "/work/heiu/hero.webp", href: "#work" },
-    { slug: "nez-coffeeneatery", title: "Nez", kind: "Café Content", year: "2022", variant: 2, cover: "/work/nez-coffeeneatery/hero.webp", href: "#work" },
+    { slug: "photo", title: "Photo", kind: "Product · Portrait · Lifestyle", variant: 0, cover: "/work/photo/hero.webp", href: "#work" },
+    { slug: "video", title: "Video", kind: "Shoot · Edit · Grade", variant: 1, status: "soon", href: "#work" },
+    { slug: "design", title: "Design", kind: "Layout · Identity · Social", variant: 2, status: "soon", href: "#work" },
   ],
 
-  reel: { caption: "Stories that move.", sub: "Campaign reel 2024 — 2026" },
+  // Reel: foto-foto ini berganti mengikuti scroll (pakai file di public/)
+  reel: { caption: "Stories that move.", sub: "Selected frames", frames: ["/work/photo/01.webp", "/work/photo/11.webp", "/work/photo/06.webp", "/work/photo/14.webp", "/work/photo/16.webp", "/work/photo/20.webp"] },
 
   statement:
-    "I help brands find their voice and say it well — turning strategy into campaigns, stories and conversations people remember.",
+    "I make images, films and visual systems — turning ideas into work people remember.",
 
   capabilities: [
-    { name: "Brand Communication", note: "Voice, message, positioning" },
-    { name: "Campaign Strategy", note: "Concept to rollout" },
-    { name: "Content & Social", note: "Story, copy, community" },
-    { name: "Media & PR", note: "Press, relations, reputation" },
+    { name: "Photography", note: "Product, portrait, lifestyle" },
+    { name: "Videography", note: "Shoot, edit, grade" },
+    { name: "Graphic Design", note: "Layout, identity, social" },
+    { name: "Creative Direction", note: "Concept to delivery" },
   ],
 
   // CATATAN: angka di bawah placeholder — isi dengan data sebenarnya.
   stats: [
-    { value: "05+", label: "Years in comms" },
-    { value: "40", label: "Campaigns run" },
-    { value: "12", label: "Brands partnered" },
+    { value: "05+", label: "Years creating" },
+    { value: "40", label: "Projects done" },
+    { value: "12", label: "Brands served" },
   ],
 
   socials: [
@@ -53,57 +55,43 @@ export const site = {
   ],
 };
 
-// Halaman project. Tambah brand baru: taruh foto di public/work/<slug>/, lalu salin blok ini.
-// `palette` tiap brand juga mewarnai section Work di beranda saat di-hover (atau saat baris di tengah layar di HP).
-// CATATAN: tahun, peran, dan kalimat brief masih placeholder — sesuaikan.
-export const cases = {
-  "bintang-zero": {
-    title: ["Bintang", "Zero 0.0"],
-    kind: "Product Visual",
-    year: "2026",
-    role: "Visual & Content",
-    brief: "Low-key light. Cold condensation. One red star.",
-    // Palet brand: dipakai halaman ini + efek warna saat hover di daftar Work
-    palette: { bg: "#070d20", fg: "#e9edf5", mute: "#787d8b", line: "rgba(233, 237, 245, 0.18)", accent: "#e2445a" },
-    hero: { src: "/work/bintang-zero/final.webp", width: 1100, height: 1954, alt: "Bintang Zero 0.0 can covered in condensation, lit from the front against a black background" },
-    // slot 1-3 menentukan posisi di galeri (lihat .shot-1/2/3 di globals.css)
+// Halaman tiap disiplin (/work/<slug>/). `palette` juga mewarnai section Work di beranda saat di-hover
+// (atau saat barisnya di tengah layar di HP). Video & Design: isi `shots` + `hero` lalu hapus status "soon".
+// `pos` foto di galeri: wide | pa pb | qa qb | t1 t2 t3 (lihat .pos-* di globals.css).
+export const categories = {
+  photo: {
+    title: ["Photo", "Selected frames"],
+    kind: "Product · Portrait · Lifestyle",
+    role: "Photographer",
+    brief: "Light first. Skin, product, mood.",
+    palette: { bg: "#ece6dc", fg: "#1d1712", mute: "#6c665f", line: "rgba(29, 23, 18, 0.2)", accent: "#b5482a" },
+    hero: { src: "/work/photo/hero.webp", width: 1552, height: 2328, alt: "Model on a dark crinkled backdrop resting her chin on her hand, holding two cream jars" },
     shots: [
-      { slot: 1, src: "/work/bintang-zero/01.webp", width: 1100, height: 1955, alt: "Bintang Zero 0.0 can, portrait frame with soft front light" },
-      { slot: 2, src: "/work/bintang-zero/02.webp", width: 2000, height: 1125, alt: "Bintang Zero 0.0 can emerging from darkness, low-key frame" },
-      { slot: 3, src: "/work/bintang-zero/03.webp", width: 2000, height: 1125, alt: "Bintang Zero 0.0 can in near darkness, wide low-key frame" },
+      { pos: "wide", src: "/work/photo/01.webp", width: 2580, height: 1720, alt: "Model holding two skincare tubes against a black backdrop" },
+      { pos: "pa", src: "/work/photo/02.webp", width: 1100, height: 1954, alt: "Bintang Zero can covered in condensation on a black background" },
+      { pos: "pb", src: "/work/photo/03.webp", width: 1023, height: 1531, alt: "Back of a sand tee printed with a red barcode and the words forgive me" },
+      { pos: "qa", src: "/work/photo/04.webp", width: 1529, height: 2292, alt: "Model with eyes closed holding a pink bottle against her cheek" },
+      { pos: "qb", src: "/work/photo/05.webp", width: 2106, height: 1404, alt: "Model holding a foam pump bottle under her chin against a white backdrop" },
+      { pos: "wide", src: "/work/photo/06.webp", width: 1965, height: 1309, alt: "Model holding two cream jars against a black background" },
+      { pos: "t1", src: "/work/photo/07.webp", width: 1080, height: 1616, alt: "Model on concrete stairs at night wearing a sand tee" },
+      { pos: "t2", src: "/work/photo/08.webp", width: 887, height: 1330, alt: "Close-up of a model with eyes closed holding a serum bottle against her cheek" },
+      { pos: "t3", src: "/work/photo/09.webp", width: 1100, height: 1650, alt: "Iced milk coffee in a branded cup on a white podium" },
+      { pos: "qa", src: "/work/photo/10.webp", width: 922, height: 1637, alt: "Dark perfume bottle on a black fabric background" },
+      { pos: "qb", src: "/work/photo/11.webp", width: 2836, height: 1890, alt: "Model holding two lotion tubes against a black backdrop" },
+      { pos: "pa", src: "/work/photo/12.webp", width: 1051, height: 1573, alt: "Model in a floral jacket holding two cream jars beside her face in a bright shop" },
+      { pos: "pb", src: "/work/photo/13.webp", width: 908, height: 1361, alt: "Model in a green top holding a small bottle by her face" },
+      { pos: "wide", src: "/work/photo/14.webp", width: 2600, height: 1734, alt: "Model with short hair holding a lotion tube against a white backdrop" },
+      { pos: "qa", src: "/work/photo/15.webp", width: 1100, height: 1650, alt: "Latte with leaf art in a black cup on white marble" },
+      { pos: "qb", src: "/work/photo/16.webp", width: 1616, height: 1080, alt: "Woman at a cafe table presenting skincare products" },
+      { pos: "t1", src: "/work/photo/17.webp", width: 1442, height: 2163, alt: "Model shading her eyes in strong sunlight while holding a bottle" },
+      { pos: "t2", src: "/work/photo/18.webp", width: 916, height: 1370, alt: "Model outdoors holding two cream jars against her cheeks, eyes closed" },
+      { pos: "t3", src: "/work/photo/19.webp", width: 1080, height: 1616, alt: "Model in profile at night wearing a sand tee" },
     ],
   },
-  heiu: {
-    title: ["Heiu", "Lookbook"],
-    kind: "Apparel Shoot",
-    year: "2021", // dari tanggal file foto; sesuaikan
-    role: "Visual & Content",
-    brief: "Night flash. Red gothic print on sand cotton.",
-    // Latar halaman = warna baju (diambil dari foto), teks cokelat tua, aksen merah dari print
-    palette: { bg: "#cdc0ad", fg: "#1c120c", mute: "#584d43", line: "rgba(28, 18, 12, 0.2)", accent: "#c8281b" },
-    layout: "portraits", // 4 foto potret: lihat .case-gallery--portraits di globals.css
-    hero: { src: "/work/heiu/hero.webp", width: 1023, height: 1531, alt: "Back of a sand-colored tee printed with a red barcode and the words forgive me, HEIU" },
-    shots: [
-      { slot: 1, src: "/work/heiu/01.webp", width: 930, height: 1392, alt: "Model in a sand tee with a small red HEIU logo, against a white wall" },
-      { slot: 2, src: "/work/heiu/02.webp", width: 1080, height: 1616, alt: "Close-up of the red gothic HEIU logo on the chest of a sand tee" },
-      { slot: 3, src: "/work/heiu/03.webp", width: 1080, height: 1616, alt: "Model in profile at night on concrete stairs, wearing the HEIU tee" },
-      { slot: 4, src: "/work/heiu/04.webp", width: 1080, height: 1616, alt: "Model facing the camera at night on concrete stairs, wearing the HEIU tee" },
-    ],
+  video: {
+    palette: { bg: "#0b0708", fg: "#f3ece9", mute: "#7f7a79", line: "rgba(243, 236, 233, 0.2)", accent: "#e5322d" },
   },
-  "nez-coffeeneatery": {
-    title: ["Nez", "Coffeeneatery"],
-    kind: "Café Content",
-    year: "2022", // dari tanggal file foto; sesuaikan
-    role: "Visual & Content",
-    brief: "Soft daylight. White marble, ice, warm cups.",
-    palette: { bg: "#efeae1", fg: "#2b1d14", mute: "#72675e", line: "rgba(43, 29, 20, 0.2)", accent: "#ac7d3b" },
-    layout: "portraits",
-    hero: { src: "/work/nez-coffeeneatery/hero.webp", width: 1100, height: 1375, alt: "Three iced drinks with the NEZ logo on white podiums, the center one orange and clear" },
-    shots: [
-      { slot: 1, src: "/work/nez-coffeeneatery/01.webp", width: 1100, height: 1650, alt: "Barista pouring espresso over milk and ice into a cup" },
-      { slot: 2, src: "/work/nez-coffeeneatery/02.webp", width: 1100, height: 1650, alt: "Latte with leaf art in a black cup on white marble with coffee beans" },
-      { slot: 3, src: "/work/nez-coffeeneatery/03.webp", width: 1100, height: 1650, alt: "Layered iced coffee in a glass on a wooden coaster" },
-      { slot: 4, src: "/work/nez-coffeeneatery/04.webp", width: 1100, height: 1650, alt: "Iced milk coffee in a NEZ cup on a white podium" },
-    ],
+  design: {
+    palette: { bg: "#d8dde6", fg: "#0c1222", mute: "#5a5f6c", line: "rgba(12, 18, 34, 0.2)", accent: "#2f4bff" },
   },
 };

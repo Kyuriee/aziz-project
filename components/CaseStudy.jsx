@@ -12,19 +12,19 @@ import { site } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/** Halaman satu project/brand. Data dari `cases` di data/site.js. */
+/** Halaman satu disiplin (Photo/Video/Design). Data dari `categories` di data/site.js. */
 export default function CaseStudy({ slug, data }) {
   const root = useRef(null);
   const palette = data.palette;
 
   // Project berikutnya (berputar); disembunyikan kalau cuma ada satu project
-  const projects = site.works.filter((w) => w.slug);
+  const projects = site.works.filter((w) => w.slug && w.status !== "soon");
   const at = projects.findIndex((w) => w.slug === slug);
   const next = projects.length > 1 ? projects[(at + 1) % projects.length] : null;
 
   const meta = [
     { label: "Type", value: data.kind },
-    { label: "Year", value: data.year },
+    { label: "Frames", value: String(data.shots.length + 1) },
     { label: "Role", value: data.role },
   ];
 
@@ -70,7 +70,7 @@ export default function CaseStudy({ slug, data }) {
     <SmoothScroll locked={false}>
       <Cursor />
       <div
-        className={`case${data.theme === "light" ? " is-light" : ""}${palette ? " has-palette" : ""}`}
+        className={`case${palette ? " has-palette" : ""}`}
         style={palette ? { "--ink": palette.bg, "--paper": palette.fg, "--mute": palette.mute, "--line": palette.line, "--accent": palette.accent } : undefined}
         ref={root}
       >
@@ -78,7 +78,7 @@ export default function CaseStudy({ slug, data }) {
           <Link href="/" className="nav-logo" data-cursor="Home">
             {site.name}
           </Link>
-          <span className="nav-count">{data.title.join(" ")}</span>
+          <span className="nav-count">{data.title[0]}</span>
           <div className="nav-right">
             <Link href="/#work" className="nav-back" data-cursor="Back">
               <ArrowLeft />
@@ -122,9 +122,9 @@ export default function CaseStudy({ slug, data }) {
             />
           </section>
 
-          <section className={`case-gallery${data.layout === "portraits" ? " case-gallery--portraits" : ""}`} aria-label="Frames">
+          <section className="case-gallery" aria-label="Frames">
             {data.shots.map((shot) => (
-              <figure className={`shot shot-${shot.slot}`} key={shot.src}>
+              <figure className={`shot pos-${shot.pos}`} key={shot.src}>
                 <img src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} loading="lazy" decoding="async" />
               </figure>
             ))}

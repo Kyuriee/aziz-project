@@ -1,20 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Link from "next/link";
 import Frame from "./Frame";
 import { ArrowUpRight } from "./Icon";
-import { cases, site } from "@/data/site";
+import { categories, site } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const HIDDEN = "inset(50% 50% 50% 50%)";
 const SHOWN = "inset(0% 0% 0% 0%)";
+const pad = (n) => String(n).padStart(2, "0");
 
-// Palet brand milik work ke-i (null kalau tidak ada)
-const brandOf = (work) => cases[work?.slug]?.palette ?? null;
+// Palet milik disiplin (null kalau tidak ada)
+const brandOf = (work) => categories[work?.slug]?.palette ?? null;
 const paletteVars = (p) =>
   p ? { "--ink": p.bg, "--paper": p.fg, "--mute": p.mute, "--line": p.line } : undefined;
 
@@ -23,7 +24,7 @@ export default function Works() {
   const preview = useRef(null);
   const follow = useRef(null);
   const [active, setActive] = useState(0);
-  const [palette, setPalette] = useState(null); // palet brand yang sedang aktif
+  const [palette, setPalette] = useState(null); // palet yang sedang aktif
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -98,10 +99,8 @@ export default function Works() {
   return (
     <section className="section works-section" id="work" ref={root} style={paletteVars(palette)}>
       <div className="section-head mono">
-        <span>(01) Selected campaigns</span>
-        <span>
-          {String(site.works.length).padStart(2, "0")} projects
-        </span>
+        <span>(01) Work</span>
+        <span>{pad(site.works.length)} disciplines</span>
       </div>
 
       <ul
@@ -110,36 +109,43 @@ export default function Works() {
         onPointerEnter={() => toggle(true)}
         onPointerLeave={() => toggle(false)}
       >
-        {site.works.map((work, i) => (
-          <li
-            className="work"
-            key={work.title}
-            onPointerEnter={(e) => {
-              setActive(i);
-              if (e.pointerType === "mouse") setPalette(brandOf(work));
-            }}
-          >
-            <Link href={work.slug ? `/work/${work.slug}/` : work.href} data-cursor="View">
-              <span className="work-idx mono">{String(i + 1).padStart(2, "0")}</span>
-              <span className="work-ttl-wrap">
-                <span className="work-title">
-                  <span className="ttl-in" style={{ display: "block" }}>{work.title}</span>
+        {site.works.map((work, i) => {
+          const soon = work.status === "soon";
+          const frames = (categories[work.slug]?.shots?.length ?? 0) + 1;
+          const Row = soon ? "div" : Link;
+          const rowProps = soon ? {} : { href: `/work/${work.slug}/`, "data-cursor": "View" };
+
+          return (
+            <li
+              className="work"
+              key={work.slug}
+              onPointerEnter={(e) => {
+                setActive(i);
+                if (e.pointerType === "mouse") setPalette(brandOf(work));
+              }}
+            >
+              <Row className={`work-link${soon ? " is-soon" : ""}`} {...rowProps}>
+                <span className="work-idx mono">{pad(i + 1)}</span>
+                <span className="work-ttl-wrap">
+                  <span className="work-title">
+                    <span className="ttl-in" style={{ display: "block" }}>{work.title}</span>
+                  </span>
                 </span>
-              </span>
-              <span className="work-meta mono">
-                {work.kind}
-                <br />
-                {work.year}
-              </span>
-              <span className="work-arrow" aria-hidden="true"><ArrowUpRight size="1.6rem" /></span>
-            </Link>
-          </li>
-        ))}
+                <span className="work-meta mono">
+                  {work.kind}
+                  <br />
+                  {soon ? "Soon" : `${frames} frames`}
+                </span>
+                <span className="work-arrow" aria-hidden="true">{!soon && <ArrowUpRight size="1.6rem" />}</span>
+              </Row>
+            </li>
+          );
+        })}
       </ul>
 
       <div className="preview" ref={preview} aria-hidden="true" style={{ clipPath: HIDDEN }}>
         {site.works.map((work, i) => (
-          <div className="frame" key={work.title} data-on={active === i}>
+          <div className="frame" key={work.slug} data-on={active === i}>
             {work.cover ? <img className="frame-photo" src={work.cover} alt="" /> : <Frame variant={work.variant} />}
           </div>
         ))}
