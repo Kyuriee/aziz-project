@@ -230,45 +230,94 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .section { padding: clamp(5rem, 12vw, 11rem) var(--pad); }
 .section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: clamp(2rem, 5vw, 4rem); color: var(--mute); }
 
-/* ---------- Works ---------- */
-.works-list { position: relative; }
-.work { position: relative; }
-.work::before {
-  content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: var(--line);
-  transform: scaleX(var(--s, 1)); transform-origin: left;
-}
-.work:last-child { border-bottom: 1px solid var(--line); }
-.work-link.is-soon { cursor: default; }
-.work-link.is-soon .work-title { opacity: 0.55; }
-.work-link {
-  display: grid; grid-template-columns: 4rem 1fr auto 3rem; align-items: center; gap: 1rem;
-  padding: clamp(1.25rem, 3vw, 2.4rem) 0;
-  transition: padding 0.6s var(--ease), opacity 0.4s;
-}
-.work-title {
-  font-family: var(--serif); font-size: clamp(3rem, 9.5vw, 9rem); line-height: 0.95; letter-spacing: -0.03em;
-  transition: transform 0.7s var(--ease), font-style 0s;
-}
-.work-idx, .work-meta { color: var(--mute); }
-.work-meta { text-align: right; line-height: 1.6; }
-.work-arrow { display: grid; justify-items: end; text-align: right; transform: translate(-8px, 8px); opacity: 0; transition: 0.5s var(--ease); }
-.works-list:hover .work { opacity: 0.28; transition: opacity 0.4s, border-color 0.8s var(--ease); }
-.works-list .work:hover { opacity: 1; }
-.work:hover .work-title { transform: translateX(clamp(0.5rem, 2vw, 2rem)); font-style: italic; }
-.work:hover .work-arrow { transform: none; opacity: 1; }
-.work-ttl-wrap { overflow: hidden; padding: 0.05em 0 0.12em; }
+/* ---------- Work (panggung) ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
-.preview {
-  position: fixed; top: 0; left: 0; z-index: 60; pointer-events: none;
-  width: clamp(240px, 26vw, 420px); aspect-ratio: 4 / 5;
-  clip-path: inset(50% 50% 50% 50%); background: #111; border: 1px solid var(--line);
-  overflow: hidden;
-}
-.preview .frame { position: absolute; inset: 0; opacity: 0; transition: opacity 0.35s; }
-.preview .frame[data-on="true"] { opacity: 1; }
-@media (hover: none), (pointer: coarse) { .preview { display: none; } }
+/* Gaya dasar (tanpa JS / reduced-motion): tiga panel tersusun vertikal, masing-masing berwarna disiplinnya */
+.stage { position: relative; }
+.stage-head, .stage-bar { display: none; }
+.dis { position: relative; height: 100svh; min-height: 560px; overflow: hidden; background-color: var(--p-bg, var(--ink)); color: var(--p-fg, var(--paper)); }
 
-.frame svg { width: 100%; height: 100%; display: block; }
+/* Mode panggung (JS menambah .is-pinned): panel bertumpuk, warna dipegang .stage */
+.stage.is-pinned { height: 100svh; overflow: hidden; }
+.is-pinned .dis { position: absolute; inset: 0; height: auto; min-height: 0; background: none; color: inherit; }
+.is-pinned .stage-head {
+  display: grid; grid-template-columns: 1fr auto 1fr; position: absolute; top: 5.5rem; left: var(--pad); right: var(--pad); z-index: 5;
+  opacity: 0.7; font-variant-numeric: tabular-nums;
+}
+.is-pinned .stage-head span:last-child { text-align: right; }
+.is-pinned .stage-bar { display: block; position: absolute; left: var(--pad); right: var(--pad); bottom: 1.25rem; height: 1px; z-index: 5; }
+.stage-bar::before { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0.2; }
+.stage-bar i { position: absolute; inset: 0; background: currentColor; transform: scaleX(0); transform-origin: left; }
+
+/* Judul raksasa: ada di belakang foto sehingga huruf sebagian tertutup (kedalaman) */
+.dis-title {
+  position: absolute; left: var(--pad); bottom: clamp(5rem, 11svh, 9rem); z-index: 1; overflow: hidden;
+  padding: 0.04em 0.1em 0.06em 0;
+  font-family: var(--sans); font-weight: 800; text-transform: uppercase; letter-spacing: -0.045em;
+  font-size: clamp(4.5rem, 18vw, 21rem); line-height: 0.8;
+}
+.dis-title-in { display: block; will-change: transform; }
+
+.dis-info { position: absolute; left: var(--pad); top: clamp(8rem, 19svh, 12rem); z-index: 4; display: grid; gap: 1.25rem; justify-items: start; }
+.dis-kind { opacity: 0.75; }
+.dis-cta {
+  display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.9rem 1.6rem; border: 1px solid currentColor; border-radius: 999px;
+  font-family: var(--sans); font-size: 1.05rem; letter-spacing: -0.01em;
+  transition: background-color 0.5s var(--ease), border-color 0.5s var(--ease), color 0.5s var(--ease);
+}
+.dis-cta:hover, .dis-cta:focus-visible { background-color: var(--accent); border-color: var(--accent); color: var(--p-bg, var(--ink)); }
+.dis-soon { padding: 0.55rem 1rem; border: 1px dashed currentColor; border-radius: 999px; opacity: 0.8; }
+
+.dis-visual-link { position: absolute; inset: 0; z-index: 2; display: block; }
+.visual { position: absolute; inset: 0; pointer-events: none; }
+
+/* Photo: foto bertumpuk dengan ukuran dan kedalaman berbeda */
+.ph { position: absolute; z-index: 2; will-change: transform; }
+.ph-img { display: block; width: 100%; height: auto; box-shadow: 0 28px 60px rgba(0, 0, 0, 0.28); }
+.ph-1 { right: 9vw; top: 15svh; width: 24vw; }
+.ph-2 { right: 33vw; top: 30svh; width: 14vw; z-index: 3; }
+.ph-3 { right: 4vw; bottom: 9svh; width: 27vw; z-index: 4; }
+.ph-4 { right: 44vw; top: 12svh; width: 11vw; }
+
+/* Video: dua pita film berlawanan arah (placeholder dari foto reel) */
+.film { position: absolute; right: 4vw; top: -15svh; width: 38vw; height: 135svh; display: flex; gap: 1.6vw; transform: rotate(-9deg); z-index: 2; }
+.film-col { position: relative; flex: 1; overflow: hidden; padding: 0 18px; background: #0a0a0a; }
+.film-col::before, .film-col::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 8px;
+  background: repeating-linear-gradient(to bottom, transparent 0 9px, rgba(243, 236, 233, 0.75) 9px 19px);
+}
+.film-col::before { left: 5px; }
+.film-col::after { right: 5px; }
+.film-track { display: grid; gap: 14px; animation: film-roll 40s linear infinite; will-change: transform; }
+.film-col-1 .film-track { animation-direction: reverse; animation-duration: 52s; }
+.film-frame { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; filter: grayscale(1) contrast(1.15) brightness(0.9); }
+@keyframes film-roll { to { transform: translateY(-50%); } }
+.film-ring {
+  --ring: clamp(5.5rem, 9vw, 9rem);
+  position: absolute; z-index: 3; width: var(--ring); height: var(--ring);
+  left: calc(77vw - var(--ring) / 2); top: calc(50svh - var(--ring) / 2); color: var(--accent);
+}
+.film-ring svg { display: block; width: 100%; height: 100%; animation: ring-pulse 3.2s ease-in-out infinite; }
+@keyframes ring-pulse { 50% { transform: scale(1.08); opacity: 0.7; } }
+
+/* Design: bentuk, titik, garis, dan huruf */
+.sh { position: absolute; z-index: 2; will-change: transform; }
+.sh i { display: block; width: 100%; height: 100%; }
+.sh-circle { right: 10vw; top: 12svh; width: 26vw; height: 26vw; }
+.sh-circle i { border: 2px solid var(--accent); border-radius: 50%; }
+.sh-square { right: 30vw; top: 38svh; width: 17vw; height: 17vw; }
+.sh-square i { background: var(--accent); animation: sh-spin 50s linear infinite; }
+.sh-dots { right: 4vw; top: 52svh; width: 20vw; height: 20vw; }
+.sh-dots i { background-image: radial-gradient(currentColor 1.6px, transparent 1.8px); background-size: 22px 22px; opacity: 0.35; }
+.sh-line { right: 0; top: 62svh; width: 46vw; height: 1px; }
+.sh-line i { height: 1px; background: currentColor; opacity: 0.6; transform: rotate(-14deg); transform-origin: right center; }
+.sh-aa { right: 8vw; bottom: 6svh; font-family: var(--serif); font-style: italic; font-size: clamp(9rem, 26vw, 28rem); line-height: 0.8; }
+@keyframes sh-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .film-track, .film-ring svg, .sh-square i { animation: none; }
+}
 
 /* ---------- Reel ---------- */
 .reel { position: relative; height: 100svh; background: var(--ink); }
@@ -350,8 +399,19 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   .line-b { font-size: 0.38em; }
   .hero-meta > :nth-child(2) { display: none; }
   .hero-foot { flex-direction: column; align-items: flex-start; }
-  .work-link { grid-template-columns: 2.4rem 1fr auto; }
-  .work-arrow { display: none; }
+  .dis-title { bottom: 11svh; font-size: clamp(4rem, 24vw, 9rem); }
+  .dis-info { top: auto; bottom: 4svh; left: var(--pad); right: var(--pad); display: flex; justify-content: space-between; align-items: center; }
+  .ph-1 { right: 6vw; top: 17svh; width: 44vw; }
+  .ph-2 { right: auto; left: 6vw; top: 30svh; width: 28vw; }
+  .ph-3 { right: 5vw; bottom: 22svh; width: 56vw; }
+  .ph-4 { display: none; }
+  .film { right: -6vw; top: -10svh; width: 58vw; }
+  .film-ring { left: calc(70vw - var(--ring) / 2); }
+  .sh-circle { right: 6vw; top: 18svh; width: 46vw; height: 46vw; }
+  .sh-square { right: 34vw; top: 34svh; width: 28vw; height: 28vw; }
+  .sh-dots { display: none; }
+  .sh-line { width: 80vw; top: 55svh; }
+  .sh-aa { right: 6vw; bottom: 20svh; font-size: clamp(7rem, 38vw, 14rem); }
   .about-side, .stats { grid-column: 1 / -1; grid-row: auto; }
   .about-statement .word:first-child { margin-left: 0; }
   .reel-frame { clip-path: inset(30% 6% 30% 6%); }
@@ -372,9 +432,6 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 
 /* Preloader tidak diulang di sesi yang sama (kembali dari halaman project) */
 .pre-seen .pre { display: none; }
-
-/* Foto cover di preview daftar Work */
-.frame-photo { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 /* ---------- Halaman project (case study) ---------- */
 .nav.is-static { opacity: 1; transform: none; }
@@ -437,16 +494,4 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   .case-hero { grid-template-columns: 1fr; align-items: start; }
   .case-hero-img { height: auto; width: 100%; justify-self: stretch; }
   .case-gallery .shot { grid-column: 1 / -1 !important; margin-top: 0 !important; }
-}
-
-/* ---------- Warna dinamis per brand di daftar Work ---------- */
-.works-section {
-  background-color: var(--ink); color: var(--paper);
-  transition: background-color 0.8s var(--ease), color 0.8s var(--ease);
-}
-.works-section .section-head, .works-section .work-idx, .works-section .work-meta { transition: color 0.8s var(--ease); }
-.work { transition: border-color 0.8s var(--ease); }
-.work::before { transition: background-color 0.8s var(--ease); }
-@media (prefers-reduced-motion: reduce) {
-  .works-section, .works-section .section-head, .works-section .work-idx, .works-section .work-meta, .work, .work::before { transition: none; }
 }

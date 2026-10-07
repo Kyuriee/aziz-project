@@ -20,13 +20,13 @@ export const site = {
 
   marquee: ["Photo", "Video", "Design", "Brand", "Story", "Motion"],
 
-  // Tiga disiplin. Punya halaman sendiri kalau `categories[slug]` berisi foto/karya.
-  // status: "soon" = belum ada karya: tampil di daftar tapi belum bisa dibuka.
-  // variant = pola visual abstrak (components/Frame.jsx) untuk preview yang belum punya cover.
+  // Tiga disiplin (panggung di section Work). Punya halaman sendiri kalau `categories[slug]` berisi foto/karya.
+  // status: "soon" = belum ada karya: tampil di panggung tapi belum bisa dibuka.
+  // visual: "photos" (pakai `images`) | "film" (pita dari site.reel.frames) | "shapes" (bentuk + huruf)
   works: [
-    { slug: "photo", title: "Photo", kind: "Product · Portrait · Lifestyle", variant: 0, cover: "/work/photo/hero.webp", href: "#work" },
-    { slug: "video", title: "Video", kind: "Shoot · Edit · Grade", variant: 1, status: "soon", href: "#work" },
-    { slug: "design", title: "Design", kind: "Layout · Identity · Social", variant: 2, status: "soon", href: "#work" },
+    { slug: "photo", title: "Photo", kind: "Product · Portrait · Lifestyle", visual: "photos", images: [{ src: "/work/photo/hero.webp", width: 1552, height: 2328 }, { src: "/work/photo/02.webp", width: 1100, height: 1954 }, { src: "/work/photo/14.webp", width: 2600, height: 1734 }, { src: "/work/photo/04.webp", width: 1529, height: 2292 }], href: "#work" },
+    { slug: "video", title: "Video", kind: "Shoot · Edit · Grade", visual: "film", status: "soon", href: "#work" },
+    { slug: "design", title: "Design", kind: "Layout · Identity · Social", visual: "shapes", status: "soon", href: "#work" },
   ],
 
   // Reel: foto-foto ini berganti mengikuti scroll (pakai file di public/)

@@ -13,7 +13,7 @@ npm run start      # preview folder out/
 ## Ubah konten
 Semua teks, kontak, daftar disiplin, galeri, dan palet warna ada di `data/site.js`.
 
-- `site.works`: tiga disiplin di beranda. `status: "soon"` = belum ada karya (tampil, belum bisa dibuka).
+- `site.works`: tiga disiplin di panggung Work (beranda). `visual`: `photos` | `film` | `shapes`. `status: "soon"` = belum ada karya (tampil, belum bisa dibuka).
 - `categories[slug]`: isi halaman `/work/<slug>/` (hero, foto galeri, palet warna).
 - `site.reel.frames`: foto yang berganti di section Reel.
 
