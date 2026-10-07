@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const pad = (n) => String(n).padStart(2, "0");
 const works = site.works;
+const REVEAL = ".ph, .film-col, .film-ring, .sh"; // item yang muncul bertahap saat scroll
 
 /* ---------- Visual tiap disiplin (semuanya dekoratif) ---------- */
 
@@ -132,8 +133,9 @@ export default function Works() {
       const setBar = gsap.quickSetter(bar.current, "scaleX");
       const titleOf = (panel) => panel.querySelector(".dis-title-in");
 
-      // Keadaan awal: hanya panel pertama tampil
+      // Keadaan awal: hanya panel pertama tampil, dan item-itemnya belum muncul (muncul saat di-scroll)
       panels.forEach((panel, i) => {
+        gsap.set(panel.querySelectorAll(REVEAL), { opacity: 0, y: 60 });
         gsap.set(panel, { opacity: i === 0 ? 1 : 0 });
         gsap.set(titleOf(panel), { yPercent: i === 0 ? 0 : 110 });
         panel.inert = i !== 0;
@@ -181,15 +183,17 @@ export default function Works() {
         });
       });
 
-      // Masuk: foto pertama naik dari bawah saat section mendekat
-      gsap.from(panels[0].querySelectorAll(".ph-img"), {
-        y: 80,
-        opacity: 0,
-        duration: 1.4,
-        stagger: 0.12,
-        ease: "expo.out",
-        scrollTrigger: { trigger: stage, start: "top 80%", once: true },
+      // Item tiap panel naik dan menyala satu per satu saat di-scroll (panel pertama langsung mulai)
+      panels.forEach((panel, i) => {
+        const items = panel.querySelectorAll(REVEAL);
+        const start = i === 0 ? 0.04 : i + 0.08;
+        const gap = Math.min(0.1, 0.45 / Math.max(1, items.length));
+        items.forEach((el, k) => {
+          tl.fromTo(el, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" }, start + k * gap);
+        });
       });
+
+      // Masuk: judul pertama naik dari bawah saat section mendekat
       gsap.from(titleOf(panels[0]), {
         yPercent: 110,
         duration: 1.3,
