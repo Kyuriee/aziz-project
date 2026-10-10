@@ -111,12 +111,13 @@ function Panel({ work }) {
 }
 
 /**
- * Section Work: panggung yang di-pin. Scroll mengganti disiplin (Photo → Video → Design):
+ * Section Work: panggung yang menempel (CSS sticky). Scroll mengganti disiplin (Photo → Video → Design):
  * judul naik-turun, visual bertukar, dan warna latar berubah mengikuti palet tiap disiplin.
  * Tanpa JS atau dengan reduced-motion, panel tersusun vertikal (gaya dasar di CSS).
  */
 export default function Works() {
   const root = useRef(null);
+  const sticky = useRef(null);
   const counter = useRef(null);
   const bar = useRef(null);
   const first = categories[works[0]?.slug]?.palette;
@@ -144,12 +145,12 @@ export default function Works() {
       let current = 0;
       const tl = gsap.timeline({
         scrollTrigger: {
+          // Pembungkus setinggi (n * 110 + 100)dvh; layar menempel selama (n * 110)dvh scroll.
+          // Sticky (bukan pin ScrollTrigger) supaya tinggi ikut toolbar browser HP dan tidak "membeku".
           trigger: stage,
           start: "top top",
-          end: "+=" + n * 110 + "%",
-          pin: true,
+          end: "bottom bottom",
           scrub: 0.8,
-          anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             setBar(self.progress);
@@ -172,7 +173,7 @@ export default function Works() {
           .to(panels[i], { opacity: 0, duration: 0.28, ease: "none" }, t)
           .fromTo(panels[i + 1], { opacity: 0 }, { opacity: 1, duration: 0.28, ease: "none" }, t + 0.1)
           .fromTo(titleOf(panels[i + 1]), { yPercent: 110 }, { yPercent: 0, duration: 0.34, ease: "power2.out" }, t + 0.12);
-        if (next) tl.to(stage, { backgroundColor: next.bg, color: next.fg, duration: 0.3, ease: "none" }, t);
+        if (next) tl.to(sticky.current, { backgroundColor: next.bg, color: next.fg, duration: 0.3, ease: "none" }, t);
       }
 
       // Drift: tiap elemen bergerak dengan kecepatan berbeda selama panelnya terlihat
@@ -206,20 +207,22 @@ export default function Works() {
   }, []);
 
   return (
-    <section className="stage" id="work" ref={root} style={first ? { backgroundColor: first.bg, color: first.fg } : undefined}>
-      <h2 className="sr-only">Work</h2>
-      <div className="stage-head mono" aria-hidden="true">
-        <span>(01) Work</span>
-        <span ref={counter}>{`01 / ${pad(works.length)}`}</span>
-        <span>{pad(works.length)} disciplines</span>
-      </div>
+    <section className="stage" id="work" ref={root} style={{ "--n": works.length }}>
+      <div className="stage-sticky" ref={sticky} style={first ? { backgroundColor: first.bg, color: first.fg } : undefined}>
+        <h2 className="sr-only">Work</h2>
+        <div className="stage-head mono" aria-hidden="true">
+          <span>(01) Work</span>
+          <span ref={counter}>{`01 / ${pad(works.length)}`}</span>
+          <span>{pad(works.length)} disciplines</span>
+        </div>
 
-      {works.map((work) => (
-        <Panel work={work} key={work.slug} />
-      ))}
+        {works.map((work) => (
+          <Panel work={work} key={work.slug} />
+        ))}
 
-      <div className="stage-bar" aria-hidden="true">
-        <i ref={bar} />
+        <div className="stage-bar" aria-hidden="true">
+          <i ref={bar} />
+        </div>
       </div>
     </section>
   );
