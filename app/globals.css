@@ -368,7 +368,11 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 }
 
 /* ---------- Reel ---------- */
-.reel { position: relative; height: 100svh; background: var(--ink); }
+.reel { position: relative; height: 100vh; height: 100svh; background: var(--ink); }
+.reel-sticky { position: relative; height: 100%; }
+/* Mode sticky (JS menambah .is-stuck). Tinggi pembungkus stabil (svh); layar di dalamnya dvh supaya penuh di HP. */
+.reel.is-stuck { height: calc(var(--n) * 45vh + 100vh); height: calc(var(--n) * 45svh + 100svh); }
+.is-stuck .reel-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; }
 .reel-frame {
   position: absolute; inset: 0; overflow: hidden; background: #0b0b0b;
   clip-path: inset(24% 30% 24% 30%);

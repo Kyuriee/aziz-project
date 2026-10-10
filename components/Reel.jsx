@@ -19,7 +19,7 @@ function timecode(progress, totalSeconds) {
   return `00:${pad(m)}:${pad(s)}:${pad(f)}`;
 }
 
-/** Frame sinematik: dibuka dari letterbox kecil ke layar penuh, di-pin selama scroll.
+/** Frame sinematik: dibuka dari letterbox kecil ke layar penuh, menempel (CSS sticky) selama scroll.
  *  Foto di `site.reel.frames` berganti mengikuti scroll, timecode ikut bergerak. */
 export default function Reel() {
   const root = useRef(null);
@@ -37,6 +37,7 @@ export default function Reel() {
     const show = (index) => imgs.forEach((el, k) => el.classList.toggle("is-on", k === index));
     let current = 0;
 
+    root.current.classList.add("is-stuck"); // aktifkan mode sticky (tanpa ini: satu layar biasa)
     const small = window.matchMedia("(max-width: 820px)").matches;
     const from = small ? "inset(30% 6% 30% 6%)" : "inset(24% 30% 24% 30%)";
 
@@ -46,10 +47,9 @@ export default function Reel() {
           scrollTrigger: {
             trigger: root.current,
             start: "top top",
-            end: "+=" + frames.length * 45 + "%",
+            // Pembungkus setinggi (n * 45 + 100)svh; layar menempel selama (n * 45)svh scroll
+            end: "bottom bottom",
             scrub: 0.4,
-            pin: true,
-            anticipatePin: 1,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               tc.current.textContent = timecode(self.progress, total);
@@ -66,31 +66,30 @@ export default function Reel() {
         .fromTo(".reel-caption", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, ease: "power2.out", duration: 0.3 }, 0.25);
     }, root);
 
-    return () => ctx.revert();
-  }, [frames.length, total]);
-
-  return (
-    <section className="reel" ref={root} aria-label="Showreel">
-      <div className="reel-frame">
-        <div className="reel-imgs" aria-hidden="true">
-          {frames.map((src, i) => (
-            <img key={src} className={`reel-img${i === 0 ? " is-on" : ""}`} src={src} alt="" loading="eager" decoding="async" />
-          ))}
-        </div>
-        <div className="reel-shade" />
-        <div className="reel-caption">
-          <span>
-            {site.reel.caption.split(" ").slice(0, -1).join(" ")} <em>{site.reel.caption.split(" ").slice(-1)}</em>
-          </span>
-        </div>
-        <div className="reel-hud mono">
-          <div>
-            <span className="rec">REC</span>
-            <span>{site.reel.sub}</span>
+    return (
+    <section className="reel" ref={root} aria-label="Showreel" style={{ "--n": frames.length }}>
+      <div className="reel-sticky">
+        <div className="reel-frame">
+          <div className="reel-imgs" aria-hidden="true">
+            {frames.map((src, i) => (
+              <img key={src} className={`reel-img${i === 0 ? " is-on" : ""}`} src={src} alt="" loading="eager" decoding="async" />
+            ))}
           </div>
-          <div>
-            <span>24 FPS — 2.39:1</span>
-            <span ref={tc}>00:00:00:00</span>
+          <div className="reel-shade" />
+          <div className="reel-caption">
+            <span>
+              {site.reel.caption.split(" ").slice(0, -1).join(" ")} <em>{site.reel.caption.split(" ").slice(-1)}</em>
+            </span>
+          </div>
+          <div className="reel-hud mono">
+            <div>
+              <span className="rec">REC</span>
+              <span>{site.reel.sub}</span>
+            </div>
+            <div>
+              <span>24 FPS — 2.39:1</span>
+              <span ref={tc}>00:00:00:00</span>
+            </div>
           </div>
         </div>
       </div>
