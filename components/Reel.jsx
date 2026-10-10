@@ -47,8 +47,10 @@ export default function Reel() {
             trigger: root.current,
             start: "top top",
             end: "+=" + frames.length * 45 + "%",
-            scrub: 0.6,
+            scrub: 0.4,
             pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
             onUpdate: (self) => {
               tc.current.textContent = timecode(self.progress, total);
               const index = Math.min(frames.length - 1, Math.floor(self.progress * frames.length));

@@ -150,7 +150,7 @@ export default function Works() {
           trigger: stage,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.8,
+          scrub: 0.4,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             setBar(self.progress);

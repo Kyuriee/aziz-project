@@ -281,11 +281,12 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .stage { position: relative; }
 .stage-sticky { position: relative; }
 .stage-head, .stage-bar { display: none; }
-.dis { position: relative; height: 100vh; height: 100dvh; min-height: 560px; overflow: hidden; background-color: var(--p-bg, var(--ink)); color: var(--p-fg, var(--paper)); }
+.dis { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background-color: var(--p-bg, var(--ink)); color: var(--p-fg, var(--paper)); }
 
 /* Mode panggung (JS menambah .is-pinned): pembungkus tinggi, layar di dalamnya menempel (sticky).
    dvh = tinggi layar yang ikut toolbar browser HP; vh = cadangan untuk browser lama. */
-.stage.is-pinned { height: calc(var(--n) * 110vh + 100vh); height: calc(var(--n) * 110dvh + 100dvh); }
+/* Tinggi pembungkus WAJIB stabil (svh): kalau berubah saat toolbar HP menciut, posisi ScrollTrigger lain (Reel) jadi basi */
+.stage.is-pinned { height: calc(var(--n) * 110vh + 100vh); height: calc(var(--n) * 110svh + 100svh); }
 .is-pinned .stage-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; }
 .is-pinned .dis { position: absolute; inset: 0; height: auto; min-height: 0; background: none; color: inherit; }
 .is-pinned .stage-head {
