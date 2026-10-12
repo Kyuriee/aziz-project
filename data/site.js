@@ -25,7 +25,7 @@ export const site = {
   // visual: "photos" (pakai `images`) | "film" (pita dari site.reel.frames) | "shapes" (bentuk + huruf)
   works: [
     { slug: "photo", title: "Photo", kind: "Product · Portrait · Lifestyle", visual: "photos", images: [{ src: "/work/photo/hero.webp", width: 1552, height: 2328 }, { src: "/work/photo/02.webp", width: 1100, height: 1954 }, { src: "/work/photo/14.webp", width: 2600, height: 1734 }, { src: "/work/photo/04.webp", width: 1529, height: 2292 }], href: "#work" },
-    { slug: "video", title: "Video", kind: "Shoot · Edit · Grade", visual: "film", status: "soon", href: "#work" },
+    { slug: "video", title: "Video", kind: "Shoot · Edit · Grade", visual: "film" },
     { slug: "design", title: "Design", kind: "Layout · Identity · Social", visual: "shapes", status: "soon", href: "#work" },
   ],
 
@@ -89,9 +89,60 @@ export const categories = {
     ],
   },
   video: {
+    title: ["Video", "Selected films"],
+    kind: "Shoot · Edit · Grade",
+    brief: "Moving frames, brand by brand.",
     palette: { bg: "#0b0708", fg: "#f3ece9", mute: "#7f7a79", line: "rgba(243, 236, 233, 0.2)", accent: "#e5322d" },
   },
   design: {
     palette: { bg: "#d8dde6", fg: "#0c1222", mute: "#5a5f6c", line: "rgba(12, 18, 34, 0.2)", accent: "#2f4bff" },
   },
 };
+
+/* ---------- Brand: pusat konten ----------
+   Satu brand = satu halaman (/work/brand/<slug>/). Photo, Video, dan Design brand itu tampil di halaman yang sama;
+   halaman disiplin (/work/photo, /work/video) hanya menyaring brand yang punya disiplin tersebut.
+   Isi `quote` ({ text, by }), `duration` ("3 minggu · Mar–Apr 2026"), dan `role` kalau sudah ada; kosong = bagian itu disembunyikan.
+   Video Vimeo: `vimeo: { id, hash }` dari URL player (hash = nilai ?h=). Tambah `poster` (webp) supaya tampilan sebelum play lebih bagus.
+   `design` memakai bentuk yang sama dengan `photo` (gambar). */
+const shots = (dir, name, files) =>
+  files.map(([file, width, height], i) => ({ src: `/work/${dir}/${file}.webp`, width, height, alt: `${name}, frame ${i + 1}` }));
+
+export const brands = [
+  {
+    slug: "nez-coffeeneatery",
+    name: "Nez Coffeeneatery",
+    cover: shots("nez-coffeeneatery", "Nez Coffeeneatery", [["hero", 1100, 1375]])[0],
+    photo: shots("nez-coffeeneatery", "Nez Coffeeneatery", [["01", 1100, 1650], ["02", 1100, 1650], ["03", 1100, 1650], ["04", 1100, 1650]]),
+    video: [{ vimeo: { id: "1234933920", hash: "76fbd6f3d0" }, ratio: "16 / 9" }],
+    design: [],
+  },
+  {
+    slug: "heiu",
+    name: "HEIU",
+    cover: shots("heiu", "HEIU", [["hero", 1023, 1531]])[0],
+    photo: shots("heiu", "HEIU", [["01", 930, 1392], ["02", 1080, 1616], ["03", 1080, 1616], ["04", 1080, 1616]]),
+    video: [],
+    design: [],
+  },
+  {
+    slug: "bintang-zero",
+    name: "Bintang Zero",
+    cover: shots("bintang-zero", "Bintang Zero", [["final", 1100, 1954]])[0],
+    photo: shots("bintang-zero", "Bintang Zero", [["01", 1100, 1955], ["02", 2000, 1125], ["03", 2000, 1125]]),
+    video: [],
+    design: [],
+  },
+];
+
+export const DISCIPLINES = [
+  { slug: "photo", title: "Photo" },
+  { slug: "video", title: "Video" },
+  { slug: "design", title: "Design" },
+];
+
+// Disiplin yang dimiliki sebuah brand (berurutan: Photo, Video, Design)
+export const disciplinesOf = (brand) => DISCIPLINES.filter((d) => brand[d.slug]?.length);
+
+// Brand yang punya karya di satu disiplin
+export const brandsWith = (slug) => brands.filter((b) => b[slug]?.length);

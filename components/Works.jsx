@@ -158,7 +158,7 @@ export default function Works() {
             const index = Math.min(n - 1, Math.max(0, Math.floor(t + 0.14)));
             if (index !== current) {
               current = index;
-              counter.current.textContent = `${pad(index + 1)} / ${pad(n)}`;
+              if (counter.current) counter.current.textContent = `${pad(index + 1)} / ${pad(n)}`;
               panels.forEach((panel, k) => { panel.inert = k !== index; });
             }
           },

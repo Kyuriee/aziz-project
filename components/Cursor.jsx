@@ -19,6 +19,7 @@ export default function Cursor() {
       yTo(e.clientY);
     };
     const over = (e) => {
+      if (!label.current || !root.current) return;
       const target = e.target.closest?.("[data-cursor]");
       label.current.textContent = target?.dataset.cursor ?? "";
       root.current.classList.toggle("is-active", Boolean(target));

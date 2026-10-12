@@ -2,15 +2,14 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SmoothScroll from "./SmoothScroll";
 import Cursor from "./Cursor";
+import CaseNav from "./CaseNav";
+import BrandRows from "./BrandRows";
 import Roll from "./Roll";
+import useCaseIntro from "./useCaseIntro";
 import { ArrowLeft, ArrowRight } from "./Icon";
-import { site } from "@/data/site";
-
-gsap.registerPlugin(ScrollTrigger);
+import { brandsWith, site } from "@/data/site";
 
 /** Halaman satu disiplin (Photo/Video/Design). Data dari `categories` di data/site.js. */
 export default function CaseStudy({ slug, data }) {
@@ -37,34 +36,7 @@ export default function CaseStudy({ slug, data }) {
     };
   }, [palette]);
 
-  useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const ctx = gsap.context(() => {
-      gsap.set(".case .line", { visibility: "visible" });
-      if (reduced) return;
-
-      gsap.set(".case .line", { yPercent: 110 });
-      gsap
-        .timeline({ delay: 0.15 })
-        .to(".case .line", { yPercent: 0, duration: 1.3, stagger: 0.12, ease: "expo.out" })
-        .fromTo(".case-hero-img", { opacity: 0, scale: 1.05 }, { opacity: 1, scale: 1, duration: 1.6, ease: "expo.out" }, 0)
-        .from(".case-fade", { opacity: 0, y: 16, duration: 0.9, stagger: 0.1, ease: "power3.out" }, 0.6);
-
-      // Tiap foto galeri muncul saat masuk layar
-      gsap.utils.toArray(".shot").forEach((shot) => {
-        gsap.from(shot, {
-          opacity: 0,
-          y: 60,
-          duration: 1.3,
-          ease: "expo.out",
-          scrollTrigger: { trigger: shot, start: "top 88%" },
-        });
-      });
-    }, root);
-
-    return () => ctx.revert();
-  }, []);
+  useCaseIntro(root);
 
   return (
     <SmoothScroll locked={false}>
@@ -74,18 +46,7 @@ export default function CaseStudy({ slug, data }) {
         style={palette ? { "--ink": palette.bg, "--paper": palette.fg, "--mute": palette.mute, "--line": palette.line, "--accent": palette.accent } : undefined}
         ref={root}
       >
-        <header className="nav is-static mono">
-          <Link href="/" className="nav-logo" data-cursor="Home">
-            {site.name}
-          </Link>
-          <span className="nav-count">{data.title[0]}</span>
-          <div className="nav-right">
-            <Link href="/#work" className="nav-back" data-cursor="Back">
-              <ArrowLeft />
-              <Roll>Work</Roll>
-            </Link>
-          </div>
-        </header>
+        <CaseNav label={data.title[0]} />
 
         <main>
           <section className="case-hero">
@@ -124,11 +85,18 @@ export default function CaseStudy({ slug, data }) {
 
           <section className="case-gallery" aria-label="Frames">
             {data.shots.map((shot) => (
-              <figure className={`shot pos-${shot.pos}`} key={shot.src}>
+              <figure className={`shot reveal pos-${shot.pos}`} key={shot.src}>
                 <img src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} loading="lazy" decoding="async" />
               </figure>
             ))}
           </section>
+
+          {brandsWith(slug).length > 0 && (
+            <section className="brand-index" aria-label="By brand">
+              <h2 className="brand-h">By brand</h2>
+              <BrandRows discipline={slug} />
+            </section>
+          )}
         </main>
 
         <footer className="case-foot">
