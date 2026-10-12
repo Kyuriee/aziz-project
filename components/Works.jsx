@@ -145,7 +145,7 @@ export default function Works() {
       let current = 0;
       const tl = gsap.timeline({
         scrollTrigger: {
-          // Pembungkus setinggi (n * 110 + 100)dvh; layar menempel selama (n * 110)dvh scroll.
+          // Pembungkus setinggi (n * 110 + 100)lvh; layar menempel selama (n * 110)lvh scroll.
           // Sticky (bukan pin ScrollTrigger) supaya tinggi ikut toolbar browser HP dan tidak "membeku".
           trigger: stage,
           start: "top top",

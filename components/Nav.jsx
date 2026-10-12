@@ -10,7 +10,7 @@ const SECTION_IDS = site.nav.map((item) => item.href.slice(1));
 const HIDE_AFTER = 160; // px scroll sebelum nav boleh menghilang
 const easeOut = (t) => 1 - Math.pow(1 - t, 4);
 
-export default function Nav({ ready }) {
+export default function Nav() {
   const lenis = useLenis();
   const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState(null);
@@ -27,17 +27,16 @@ export default function Nav({ ready }) {
 
   /* ---------- Intro ---------- */
   useEffect(() => {
-    if (!ready) return;
-    gsap.to(header.current, { opacity: 1, y: 0, duration: 1, ease: "expo.out", delay: 0.6 });
-  }, [ready]);
+    gsap.to(header.current, { opacity: 1, y: 0, duration: 1, ease: "expo.out", delay: 0.3 });
+  }, []);
 
   /* ---------- Kembali dari halaman project: lompat ke section di URL (#work) ---------- */
   useEffect(() => {
-    if (!ready || !lenis || !window.location.hash) return;
+    if (!lenis || !window.location.hash) return;
     const id = window.location.hash;
     const t = setTimeout(() => lenis.scrollTo(id, { immediate: true }), 150);
     return () => clearTimeout(t);
-  }, [ready, lenis]);
+  }, [lenis]);
 
   /* ---------- Smart hide: turun saat scroll ke atas, naik saat scroll ke bawah ---------- */
   const setHidden = useCallback((hide) => {

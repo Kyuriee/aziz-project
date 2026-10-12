@@ -19,11 +19,9 @@ function Clock() {
   return <span>Local {time}</span>;
 }
 
-export default function Hero({ ready }) {
+export default function Hero() {
   const root = useRef(null);
   const intro = useRef(null);
-  const readyRef = useRef(ready);
-  readyRef.current = ready;
 
   const nameWords = site.name.split(" ");
   const [roleFirst, ...roleRest] = site.role.split(" ");
@@ -60,7 +58,7 @@ export default function Hero({ ready }) {
         .to(splitB.words, { yPercent: 0, duration: 1.1, stagger: 0.1, ease: "expo.out" }, "-=0.9")
         .to(".hero-fade", { opacity: 1, y: 0, duration: 1, stagger: 0.12, ease: "power3.out" }, "-=0.8");
 
-      if (readyRef.current) intro.current.play();
+      intro.current.play();
 
       // Baris judul bergeser berlawanan arah
       const scrub = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
@@ -75,10 +73,6 @@ export default function Hero({ ready }) {
       splitB?.revert();
     };
   }, []);
-
-  useEffect(() => {
-    if (ready) intro.current?.play();
-  }, [ready]);
 
   return (
     <section className="hero is-light" id="top" ref={root}>
