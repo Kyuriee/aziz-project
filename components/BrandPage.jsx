@@ -1,26 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import SmoothScroll, { useLenis } from "./SmoothScroll";
 import Cursor from "./Cursor";
 import CaseNav from "./CaseNav";
+import Gallery from "./Gallery";
 import VideoEmbed from "./VideoEmbed";
-import useCaseIntro from "./useCaseIntro";
-import { ArrowDown, ArrowLeft, ArrowRight } from "./Icon";
 import Roll from "./Roll";
+import useCaseIntro from "./useCaseIntro";
+import { ArrowLeft, ArrowRight } from "./Icon";
 import { brands, disciplinesOf, site } from "@/data/site";
 
-const SCROLL_OFFSET = -80;
+const SCROLL_OFFSET = -120; // ruang untuk header dan tab yang menempel
+const SECTION_ORDER = ["video", "photo", "design"]; // video paling atas: bobotnya paling besar
 
-// Posisi mosaik tiap foto: yang lanskap melebar penuh, yang potret berpasangan (pos-* di globals.css)
-function layoutShots(items) {
-  const pair = ["pa", "pb", "qa", "qb"];
-  let portrait = 0;
-  return items.map((item) => ({ ...item, pos: item.width > item.height ? "wide" : pair[portrait++ % pair.length] }));
-}
-
-// Loncat ke #photo / #video / #design lewat Lenis (dari link chip halaman disiplin)
+// Loncat ke #photo / #video / #design lewat Lenis (dari chip di halaman lain)
 function HashJump() {
   const lenis = useLenis();
   useEffect(() => {
@@ -31,39 +26,48 @@ function HashJump() {
   return null;
 }
 
-function Jump({ id, children }) {
+/** Tab yang menempel di atas: loncat antar section dan menandai section yang sedang terlihat. */
+function SectionTabs({ sections, brand }) {
   const lenis = useLenis();
-  const go = (e) => {
+  const [active, setActive] = useState(sections[0].slug);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
+      { rootMargin: "-35% 0px -55% 0px" }
+    );
+    sections.forEach((s) => {
+      const el = document.getElementById(s.slug);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [sections]);
+
+  const go = (e, slug) => {
     if (!lenis) return;
     e.preventDefault();
-    lenis.scrollTo(`#${id}`, { offset: SCROLL_OFFSET });
+    lenis.scrollTo(`#${slug}`, { offset: SCROLL_OFFSET });
   };
-  return (
-    <a href={`#${id}`} className="brand-jump" onClick={go} data-cursor="Go">
-      {children}
-      <ArrowDown />
-    </a>
-  );
-}
 
-function Gallery({ items }) {
   return (
-    <div className="case-gallery">
-      {layoutShots(items).map((shot) => (
-        <figure className={`shot reveal pos-${shot.pos}`} key={shot.src}>
-          <img src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} loading="lazy" decoding="async" />
-        </figure>
+    <nav className="brand-tabs mono" aria-label="Sections">
+      {sections.map((s) => (
+        <a href={`#${s.slug}`} key={s.slug} aria-current={active === s.slug ? "true" : undefined} onClick={(e) => go(e, s.slug)} data-cursor="Go">
+          {s.title}
+          <span>{brand[s.slug].length}</span>
+        </a>
       ))}
-    </div>
+    </nav>
   );
 }
 
-/** Halaman satu brand: quote dan lama kerja di atas, lalu karya Photo, Video, Design di bawahnya. */
+/** Halaman satu brand: quote dan lama kerja di atas, lalu karya Video, Photo, Design di bawahnya. */
 export default function BrandPage({ brand }) {
   const root = useRef(null);
   useCaseIntro(root);
 
   const disciplines = disciplinesOf(brand);
+  const sections = SECTION_ORDER.map((slug) => disciplines.find((d) => d.slug === slug)).filter(Boolean);
   const [first, ...rest] = brand.name.split(" ");
   const next = brands[(brands.findIndex((b) => b.slug === brand.slug) + 1) % brands.length];
   const meta = [
@@ -108,14 +112,6 @@ export default function BrandPage({ brand }) {
                   </div>
                 ))}
               </dl>
-
-              {disciplines.length > 1 && (
-                <nav className="brand-jumps mono case-fade" aria-label="Sections">
-                  {disciplines.map((d) => (
-                    <Jump id={d.slug} key={d.slug}>{d.title}</Jump>
-                  ))}
-                </nav>
-              )}
             </div>
 
             <img
@@ -129,12 +125,10 @@ export default function BrandPage({ brand }) {
             />
           </section>
 
-          {disciplines.map((d) => (
-            <section className="brand-section" id={d.slug} key={d.slug} aria-labelledby={`${d.slug}-h`}>
-              <h2 className="brand-h" id={`${d.slug}-h`}>
-                {d.title}
-                <span className="mono">{brand[d.slug].length}</span>
-              </h2>
+          {sections.length > 1 && <SectionTabs sections={sections} brand={brand} />}
+
+          {sections.map((d) => (
+            <section className="brand-section" id={d.slug} key={d.slug} aria-label={d.title}>
               {d.slug === "video" ? (
                 <div className="brand-videos">
                   {brand.video.map((video) => (
@@ -142,7 +136,7 @@ export default function BrandPage({ brand }) {
                   ))}
                 </div>
               ) : (
-                <Gallery items={brand[d.slug]} />
+                <Gallery items={brand[d.slug]} kind="photo" />
               )}
             </section>
           ))}

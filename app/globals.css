@@ -445,23 +445,6 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .case-meta dd { color: var(--paper); }
 .case-hero-img { display: block; height: min(76svh, 62vw); width: auto; max-width: 100%; justify-self: end; }
 
-/* Galeri asimetris: tiap slot punya posisi sendiri, bukan grid seragam */
-.case-gallery {
-  display: grid; grid-template-columns: repeat(12, 1fr);
-  column-gap: var(--pad); row-gap: clamp(3rem, 8vw, 8rem);
-  padding: clamp(4rem, 10vw, 9rem) var(--pad);
-}
-.shot img { display: block; width: 100%; height: auto; }
-/* Mosaik asimetris: tiap foto punya posisi sendiri (pos-*), bukan grid seragam */
-.pos-wide { grid-column: 1 / -1; }
-.pos-pa { grid-column: 1 / 6; }
-.pos-pb { grid-column: 7 / -1; margin-top: clamp(4rem, 12vw, 12rem); }
-.pos-qa { grid-column: 1 / 6; }
-.pos-qb { grid-column: 6 / -1; align-self: end; }
-.pos-t1 { grid-column: 1 / 5; }
-.pos-t2 { grid-column: 5 / 9; margin-top: clamp(3rem, 9vw, 9rem); }
-.pos-t3 { grid-column: 9 / -1; }
-
 .case-foot { border-top: 1px solid var(--line); }
 .case-next { display: grid; gap: 0.75rem; padding: clamp(4rem, 10vw, 9rem) var(--pad); }
 .case-next-label, .case-next-meta { color: var(--mute); }
@@ -485,34 +468,29 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 @media (max-width: 820px) {
   .case-hero { grid-template-columns: 1fr; align-items: start; }
   .case-hero-img { height: auto; width: 100%; justify-self: stretch; }
-  .case-gallery .shot { grid-column: 1 / -1 !important; margin-top: 0 !important; }
 }
 
-/* ---------- Brand (halaman brand, daftar brand per disiplin, video) ---------- */
+/* ---------- Brand, gallery, video, lightbox ---------- */
 .discipline-hero { padding: 7rem var(--pad) clamp(1rem, 3vw, 2rem); }
 
 .brand-quote { margin-top: clamp(1.5rem, 3vw, 2.5rem); max-width: 28ch; }
 .brand-quote p { font-family: var(--serif); font-style: italic; font-size: clamp(1.5rem, 3vw, 2.6rem); line-height: 1.12; letter-spacing: -0.02em; text-wrap: balance; }
 .brand-quote cite { display: block; margin-top: 1rem; font-style: normal; color: var(--mute); }
 
-.brand-jumps { display: flex; flex-wrap: wrap; gap: 0.25rem 2rem; margin-top: 1.25rem; }
-.brand-jump { display: inline-flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; }
-.brand-jump svg { width: 1.1em; height: 1.1em; transition: transform 0.6s var(--ease); }
-.brand-jump:hover svg, .brand-jump:focus-visible svg { transform: translateY(0.2em); }
-
-.brand-section, .brand-index { padding-top: clamp(3rem, 8vw, 7rem); }
-.brand-h {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
-  margin: 0 var(--pad); padding-bottom: 1.25rem; border-bottom: 1px solid var(--line);
-  font-family: var(--sans); font-weight: 800; text-transform: uppercase; letter-spacing: -0.04em; line-height: 0.85;
-  font-size: clamp(2.6rem, 8vw, 7rem);
+/* Tab section: menempel di bawah header, menandai section yang sedang terlihat */
+.brand-tabs {
+  position: sticky; top: 4.25rem; z-index: 40; display: flex; gap: 0.25rem 2rem;
+  padding: 0 var(--pad); background: var(--ink); border-bottom: 1px solid var(--line);
 }
-.brand-h .mono { font-weight: 400; font-size: 0.9rem; letter-spacing: 0; color: var(--mute); }
-.brand-section .case-gallery { padding-top: clamp(2rem, 5vw, 4rem); padding-bottom: 0; }
-.brand-section:last-child .case-gallery, .brand-section:last-child .brand-videos { padding-bottom: clamp(4rem, 10vw, 9rem); }
+.brand-tabs a { display: inline-flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; color: var(--mute); transition: color 0.4s var(--ease); }
+.brand-tabs a span { font-variant-numeric: tabular-nums; opacity: 0.6; }
+.brand-tabs a:hover, .brand-tabs a[aria-current] { color: var(--paper); }
 
-/* Video: poster + tombol play dulu, iframe baru dimuat saat diklik */
-.brand-videos { display: grid; gap: clamp(1.5rem, 4vw, 3rem); padding: clamp(2rem, 5vw, 4rem) var(--pad) 0; }
+.brand-section { padding-top: clamp(1.5rem, 4vw, 3rem); }
+.brand-section:last-child { padding-bottom: clamp(4rem, 10vw, 9rem); }
+
+/* Video: poster + tombol play dulu, iframe baru dimuat saat diklik atau saat terlihat (muted) */
+.brand-videos { display: grid; gap: clamp(1.5rem, 4vw, 3rem); padding: 0 var(--pad); }
 .vid { position: relative; width: 100%; overflow: hidden; background: #0b0b0b; }
 .vid-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .vid-facade {
@@ -530,28 +508,65 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .vid-facade:hover .vid-play, .vid-facade:focus-visible .vid-play { background: #f3f3f1; color: #050505; transform: scale(1.06); }
 .vid-name { position: absolute; left: 1rem; bottom: 1rem; opacity: 0.7; }
 
-/* Daftar brand: baris besar dengan chip ke disiplin lain brand yang sama */
-.brand-rows { list-style: none; padding: clamp(1.5rem, 4vw, 3rem) var(--pad) clamp(4rem, 10vw, 9rem); }
-.brand-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem 2rem; padding: clamp(1.2rem, 2.5vw, 2rem) 0; border-top: 1px solid var(--line); }
-.brand-row:last-child { border-bottom: 1px solid var(--line); }
-.brand-row-main { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2.5rem); flex: 1 1 20rem; min-width: 0; }
-.brand-row-thumb { flex: none; width: clamp(3.5rem, 7vw, 6rem); aspect-ratio: 4 / 5; object-fit: cover; filter: grayscale(1); transition: filter 0.6s var(--ease); }
-.brand-row-name {
-  font-family: var(--sans); font-weight: 800; text-transform: uppercase; letter-spacing: -0.04em; line-height: 0.9;
-  font-size: clamp(2rem, 6vw, 5.5rem); overflow-wrap: anywhere; transition: transform 0.7s var(--ease);
-}
-.brand-row-main svg { flex: none; width: clamp(1.2rem, 3vw, 2.4rem); height: clamp(1.2rem, 3vw, 2.4rem); margin-left: auto; transition: transform 0.7s var(--ease); }
-.brand-row-main:hover .brand-row-thumb, .brand-row-main:focus-visible .brand-row-thumb { filter: none; }
-.brand-row-main:hover .brand-row-name, .brand-row-main:focus-visible .brand-row-name { transform: translateX(clamp(0.4rem, 1.5vw, 1.2rem)); }
-.brand-row-main:hover svg, .brand-row-main:focus-visible svg { transform: translate(0.2em, -0.2em); }
-.brand-row-duration { color: var(--mute); }
-.brand-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; }
-.brand-chips a {
-  display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1.1rem; border: 1px solid var(--line); border-radius: 999px;
+/* Gallery: masonry (kolom CSS), foto tampil dengan rasio aslinya */
+.gal { padding: 0 var(--pad) clamp(4rem, 10vw, 9rem); }
+.gal-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 1rem 0; }
+.gal-bar.is-sticky { position: sticky; top: 4.25rem; z-index: 40; margin: 0 calc(var(--pad) * -1); padding: 0.75rem var(--pad); background: var(--ink); border-bottom: 1px solid var(--line); }
+.brand-section .gal { padding-bottom: 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; }
+.chips button, .gal-density button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; min-height: 2.75rem; padding: 0 1.1rem;
+  border: 1px solid var(--line); border-radius: 999px;
   transition: background-color 0.4s var(--ease), color 0.4s var(--ease), border-color 0.4s var(--ease);
 }
-.brand-chips a:hover, .brand-chips a:focus-visible { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.chips button span { opacity: 0.55; font-variant-numeric: tabular-nums; }
+.chips button:hover, .gal-density button:hover { border-color: var(--paper); }
+.chips button[aria-pressed="true"], .gal-density button[aria-pressed="true"] { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.gal-density { display: flex; gap: 0.5rem; margin-left: auto; }
+.gal-density button { min-width: 2.75rem; padding: 0; }
+.gal-density .sm { display: none; }
+
+.gal-grid { list-style: none; column-gap: clamp(0.75rem, 1.6vw, 1.5rem); padding-top: 1rem; }
+.gal-grid[data-kind="photo"][data-density="loose"] { column-count: 2; }
+.gal-grid[data-kind="photo"][data-density="mid"] { column-count: 3; }
+.gal-grid[data-kind="photo"][data-density="tight"] { column-count: 4; }
+.gal-grid[data-kind="video"][data-density="loose"] { column-count: 1; }
+.gal-grid[data-kind="video"][data-density="mid"] { column-count: 2; }
+.gal-item { break-inside: avoid; margin-bottom: clamp(0.75rem, 1.6vw, 1.5rem); animation: gal-in 0.8s var(--ease) both; }
+.gal-photo { display: block; width: 100%; overflow: hidden; }
+.gal-photo img { display: block; width: 100%; height: auto; transition: transform 1.2s var(--ease); }
+.gal-photo:hover img, .gal-photo:focus-visible img { transform: scale(1.03); }
+.gal-caption { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; color: var(--mute); transition: color 0.4s var(--ease); }
+.gal-caption:hover { color: var(--paper); }
+.gal-caption svg { width: 1em; height: 1em; }
+@keyframes gal-in { from { opacity: 0; transform: translateY(24px); } }
+
+/* Lightbox: <dialog> layar penuh, warna mengikuti palet halaman */
+.lb { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: var(--ink); color: var(--paper); }
+.lb[open] { display: grid; grid-template-rows: auto 1fr; animation: lb-in 0.4s var(--ease); }
+.lb::backdrop { background: var(--ink); }
+.lb-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.5rem var(--pad); }
+.lb-brand { padding: 0.75rem 0; }
+.lb-btn { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%; border: 1px solid var(--line); background: var(--ink); transition: background-color 0.4s var(--ease), color 0.4s var(--ease); }
+.lb-btn:hover { background: var(--paper); color: var(--ink); }
+.lb-btn svg { width: 1.2em; height: 1.2em; }
+.lb-stage { display: grid; place-items: center; min-height: 0; padding: 0 var(--pad) var(--pad); touch-action: pan-y; }
+.lb-img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; animation: lb-in 0.5s var(--ease); }
+.lb-prev, .lb-next { position: absolute; top: 50%; translate: 0 -50%; }
+.lb-prev { left: var(--pad); }
+.lb-next { right: var(--pad); }
+@keyframes lb-in { from { opacity: 0; } }
 
 @media (max-width: 820px) {
-  .brand-chips { flex-basis: 100%; }
+  .gal-grid[data-kind="photo"][data-density="loose"] { column-count: 1; }
+  .gal-grid[data-kind="photo"][data-density="mid"], .gal-grid[data-kind="photo"][data-density="tight"] { column-count: 2; }
+  .gal-grid[data-kind="video"] { column-count: 1; }
+  .gal-density .lg, .gal-density .hide-sm { display: none; }
+  .gal-density .sm { display: inline; }
+  .lb-prev, .lb-next { top: auto; bottom: calc(var(--pad) * 0.6); translate: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gal-item, .lb[open], .lb-img { animation: none; }
 }

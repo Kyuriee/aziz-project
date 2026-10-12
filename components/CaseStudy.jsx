@@ -5,11 +5,13 @@ import Link from "next/link";
 import SmoothScroll from "./SmoothScroll";
 import Cursor from "./Cursor";
 import CaseNav from "./CaseNav";
-import BrandRows from "./BrandRows";
+import Gallery from "./Gallery";
 import Roll from "./Roll";
 import useCaseIntro from "./useCaseIntro";
 import { ArrowLeft, ArrowRight } from "./Icon";
-import { brandsWith, site } from "@/data/site";
+import { photoGallery, site } from "@/data/site";
+
+const gallery = photoGallery();
 
 /** Halaman satu disiplin (Photo/Video/Design). Data dari `categories` di data/site.js. */
 export default function CaseStudy({ slug, data }) {
@@ -23,7 +25,7 @@ export default function CaseStudy({ slug, data }) {
 
   const meta = [
     { label: "Type", value: data.kind },
-    { label: "Frames", value: String(data.shots.length + 1) },
+    { label: "Frames", value: String(gallery.length + 1) },
     { label: "Role", value: data.role },
   ];
 
@@ -83,20 +85,7 @@ export default function CaseStudy({ slug, data }) {
             />
           </section>
 
-          <section className="case-gallery" aria-label="Frames">
-            {data.shots.map((shot) => (
-              <figure className={`shot reveal pos-${shot.pos}`} key={shot.src}>
-                <img src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} loading="lazy" decoding="async" />
-              </figure>
-            ))}
-          </section>
-
-          {brandsWith(slug).length > 0 && (
-            <section className="brand-index" aria-label="By brand">
-              <h2 className="brand-h">By brand</h2>
-              <BrandRows discipline={slug} />
-            </section>
-          )}
+          <Gallery items={gallery} filterable sticky />
         </main>
 
         <footer className="case-foot">

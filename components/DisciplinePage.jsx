@@ -5,14 +5,16 @@ import Link from "next/link";
 import SmoothScroll from "./SmoothScroll";
 import Cursor from "./Cursor";
 import CaseNav from "./CaseNav";
-import BrandRows from "./BrandRows";
+import Gallery from "./Gallery";
 import Roll from "./Roll";
 import useCaseIntro from "./useCaseIntro";
 import { ArrowLeft } from "./Icon";
-import { site } from "@/data/site";
+import { site, videoGallery } from "@/data/site";
 
-/** Halaman disiplin tanpa galeri sendiri (mis. Video): daftar brand yang punya karya di disiplin ini. */
-export default function DisciplinePage({ slug, data }) {
+const gallery = videoGallery();
+
+/** Halaman Video: semua video lintas brand, bisa difilter per brand. */
+export default function DisciplinePage({ data }) {
   const root = useRef(null);
   useCaseIntro(root);
 
@@ -35,7 +37,7 @@ export default function DisciplinePage({ slug, data }) {
             <p className="case-brief case-fade">{data.brief}</p>
           </section>
 
-          <BrandRows discipline={slug} />
+          <Gallery items={gallery} kind="video" filterable sticky />
         </main>
 
         <footer className="case-foot">
