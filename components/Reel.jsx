@@ -37,7 +37,7 @@ export default function Reel() {
     const show = (index) => imgs.forEach((el, k) => el.classList.toggle("is-on", k === index));
     let current = 0;
 
-    root.current.classList.add("is-stuck"); // aktifkan mode sticky (tanpa ini: satu layar biasa)
+    root.current.classList.add("is-stuck");
     const small = window.matchMedia("(max-width: 820px)").matches;
     const from = small ? "inset(30% 6% 30% 6%)" : "inset(24% 30% 24% 30%)";
 
@@ -47,7 +47,6 @@ export default function Reel() {
           scrollTrigger: {
             trigger: root.current,
             start: "top top",
-            // Pembungkus setinggi (n * 45 + 100)svh; layar menempel selama (n * 45)svh scroll
             end: "bottom bottom",
             scrub: 0.4,
             invalidateOnRefresh: true,
@@ -66,7 +65,12 @@ export default function Reel() {
         .fromTo(".reel-caption", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, ease: "power2.out", duration: 0.3 }, 0.25);
     }, root);
 
-    return (
+    return () => {
+      ctx.revert();
+    };
+  }, []);
+
+  return (
     <section className="reel" ref={root} aria-label="Showreel" style={{ "--n": frames.length }}>
       <div className="reel-sticky">
         <div className="reel-frame">
