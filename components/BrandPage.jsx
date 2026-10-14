@@ -10,7 +10,7 @@ import VideoEmbed from "./VideoEmbed";
 import Roll from "./Roll";
 import useCaseIntro from "./useCaseIntro";
 import { ArrowLeft, ArrowRight } from "./Icon";
-import { brands, disciplinesOf, site } from "@/data/site";
+import { disciplinesOf, liveBrands, site } from "@/data/site";
 
 const SCROLL_OFFSET = -120; // ruang untuk header dan tab yang menempel
 const SECTION_ORDER = ["video", "photo", "design"]; // video paling atas: bobotnya paling besar
@@ -69,7 +69,8 @@ export default function BrandPage({ brand }) {
   const disciplines = disciplinesOf(brand);
   const sections = SECTION_ORDER.map((slug) => disciplines.find((d) => d.slug === slug)).filter(Boolean);
   const [first, ...rest] = brand.name.split(" ");
-  const next = brands[(brands.findIndex((b) => b.slug === brand.slug) + 1) % brands.length];
+  const live = liveBrands();
+  const next = live[(live.findIndex((b) => b.slug === brand.slug) + 1) % live.length];
   const meta = [
     { label: "Scope", value: disciplines.map((d) => d.title).join(" · ") },
     brand.duration && { label: "Duration", value: brand.duration },

@@ -17,6 +17,21 @@ Semua teks, kontak, daftar disiplin, galeri, dan palet warna ada di `data/site.j
 - `categories[slug]`: isi halaman `/work/<slug>/` (hero, foto galeri, palet warna).
 - `site.reel.frames`: foto yang berganti di section Reel.
 
+## Sosial media (section Contact + menu mobile)
+`site.socials` di `data/site.js` sudah berisi Instagram, TikTok, YouTube, Vimeo, Behance, LinkedIn, Pinterest, Dribbble, Threads, X, Facebook. Isi `href` dan `handle` (teks yang tampil), lalu ubah `show: true`. Kalau `show: false` atau `href` kosong, tidak tampil. Email sudah jadi tombol utama.
+
+## Journey, pendidikan, skill (dari CV)
+- `journey`: perjalanan kerja (terbaru ke lama). `tags` memilih ikon (`feed`, `reels`, `captions`, `shoot`, `edit`, `docs`; daftar di `components/Journey.jsx`).
+- Kalau sebuah brand di Journey sudah punya halaman karya, isi `brand: "<slug>"` (slug yang sama di `brands`); nama perusahaannya otomatis jadi link.
+- `education`, `site.tools`, `site.languages`: tampil di Journey dan About.
+
+## Brand dari CV (assets menyusul)
+Tiap brand di CV sudah punya slug di `brands` (`data/site.js`) dengan `photo/video/design` kosong. Halaman `/work/brand/<slug>/` dan link di Journey otomatis aktif begitu salah satunya diisi. Role dan lama kerja diambil dari `journey`; cover default = foto pertama (brand khusus video isi `cover` sendiri).
+
+1. Taruh foto mentah di `assets-src/<slug>/` (folder ini tidak ikut git). Foto cover beri nama `hero.jpg`.
+2. `npm install` (sekali), lalu `npm run images -- <slug>` untuk convert ke WebP + compress ke `public/work/<slug>/`.
+3. Tempel baris `shots(...)` yang dicetak ke `photo` (atau `design`) brand itu. Video tetap lewat Vimeo (`vimeo: { id, hash }`).
+
 ## Tambah karya ke Photo
 1. Taruh foto (webp, lebar maks ~2000px) di `public/work/photo/`.
 2. Tambah baris di `categories.photo.shots` dengan `pos` (posisi di galeri): `wide`, `pa`/`pb`, `qa`/`qb`, atau `t1`/`t2`/`t3` (lihat `.pos-*` di `app/globals.css`).

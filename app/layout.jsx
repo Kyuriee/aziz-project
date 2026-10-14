@@ -26,8 +26,12 @@ const debugScript = String.raw`(function () {
 })();`;
 
 export const metadata = {
+  // Tanpa `site.url`, Next memakai domain Vercel otomatis untuk link gambar share
+  metadataBase: site.url ? new URL(site.url) : undefined,
   title: site.title,
   description: site.description,
+  openGraph: { type: "website", title: site.title, description: site.description, images: [site.og] },
+  twitter: { card: "summary_large_image", title: site.title, description: site.description, images: [site.og.src] },
 };
 
 export const viewport = { themeColor: "#050505" };

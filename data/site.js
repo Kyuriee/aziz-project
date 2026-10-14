@@ -1,21 +1,48 @@
 // Semua konten portofolio ada di sini. Ganti sesuai kebutuhan — komponen tidak perlu disentuh.
+// Perjalanan kerja (urutan terbaru ke lama), diambil dari CV.
+// `tags`: kunci di TAGS (components/Journey.jsx). `brand`: slug di `brands` (bawah). Nama perusahaan baru jadi link
+// ke /work/brand/<slug>/ setelah brand itu punya karya; sebelum itu tampil sebagai teks biasa.
+export const journey = [
+  // Freelance: `brands` = slug brand yang punya halaman karya (lihat `brands`); `period` kosong = label "Freelance"
+  { period: null, role: "Freelance Creative", brands: ["bintang-zero", "heiu", "nez-coffeeneatery"], tags: ["shoot", "reels", "feed"] },
+  { period: ["06/2024", "09/2026"], role: "Marketing Communication", company: "FitNation", brand: "fitnation", tags: ["feed", "reels", "captions", "shoot", "edit"] },
+  { period: ["06/2023", "06/2024"], role: "Video Editor", company: "Tzuyu Skincare", brand: "tzuyu-skincare", tags: ["feed", "reels", "captions"] },
+  { period: ["11/2022", "06/2023"], role: "Graphic Designer", company: "Starphone Semarang", brand: "starphone-semarang", tags: ["feed", "reels", "captions"] },
+  { period: ["07/2022", "10/2022"], role: "Videographer", company: "Salwa Official", brand: "salwa-official", tags: ["shoot", "edit"] },
+  { period: ["03/2022", "07/2022"], role: "Videographer", company: "Dinas Pendidikan dan Kebudayaan Kalimantan Barat", brand: "disdikbud-kalbar", tags: ["docs"] },
+  { period: ["01/2022", "07/2022"], role: "Videographer", company: "Cantik Clinic", brand: "cantik-clinic", tags: ["shoot", "edit"] },
+  { period: ["01/2022", "07/2022"], role: "Videographer", company: "Chamomile", brand: "chamomile", tags: ["shoot", "edit"] },
+  { period: ["01/2022", "07/2022"], role: "Videographer", company: "DNA Farmasi", brand: "dna-farmasi", tags: ["shoot", "edit"] },
+];
+
+export const education = {
+  period: ["2018", "2021"],
+  field: "Multimedia",
+  school: "SMK N 2 Singkawang",
+  badges: ["Student council president", "GenRe Singkawang ambassador", "Head of PIK-R", "LSP P1 Multimedia"],
+};
+
 export const site = {
   name: "Aziz Zulhakim",
   role: "Digital Creative",
   year: 2026,
   email: "zulhakimaziz778@gmail.com",
   phone: "0895372691601",
-  location: "Indonesia",
+  location: "Semarang, Indonesia",
   status: "Open for work",
   title: "Aziz Zulhakim — Digital Creative",
   description: "Photo, video, and design with a point of view.",
+  // Domain sendiri (mis. "https://azizzulhakim.com") untuk link share. Kosong = pakai domain Vercel otomatis.
+  url: "",
+  og: { src: "/og.jpg", width: 1200, height: 630, alt: "Aziz Zulhakim, Digital Creative: black-and-white portrait beside the name" },
 
   portrait: { src: "/portrait.jpg", width: 770, height: 1368, alt: "Black-and-white portrait of Aziz Zulhakim in a black tuxedo with an untied bow tie" },
 
   nav: [
     { label: "Work", href: "#work" },
     { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
+    { label: "Journey", href: "#journey" },
+    { label: "Contact", href: "#contact", cta: true },
   ],
 
   marquee: ["Photo", "Video", "Design", "Brand", "Story", "Motion"],
@@ -37,23 +64,39 @@ export const site = {
 
   capabilities: [
     { name: "Photography", note: "Product, portrait, lifestyle" },
-    { name: "Videography", note: "Shoot, edit, grade" },
-    { name: "Graphic Design", note: "Layout, identity, social" },
+    { name: "Videography", note: "Shoot, edit, reels" },
+    { name: "Graphic Design", note: "Feed, stories, layout" },
     { name: "Creative Direction", note: "Concept to delivery" },
   ],
 
-  // CATATAN: angka di bawah placeholder — isi dengan data sebenarnya.
+  // Angka dari CV: 4 tahun pengalaman; jumlah tim/klien dihitung dari `journey` (brand freelance dihitung satu per satu).
   stats: [
-    { value: "05+", label: "Years creating" },
-    { value: "40", label: "Projects done" },
-    { value: "12", label: "Brands served" },
+    { value: "4", label: "years creating" },
+    { value: String(journey.reduce((n, j) => n + (j.brands ? j.brands.length : 1), 0)), label: "teams & clients" },
   ],
 
+  tools: ["Photoshop", "After Effects", "Premiere Pro", "Canva", "CapCut"],
+  languages: [{ name: "Bahasa Indonesia", level: "Native" }, { name: "English", level: "Intermediate" }],
+
+  // Kanal di section Contact dan menu mobile. Isi `href` (+ `handle` = teks yang tampil, mis. "@aziz"), lalu ubah `show` jadi true.
+  // Tampil hanya kalau `show: true` DAN `href` terisi. Email sudah jadi tombol utama, jadi tidak ada di daftar ini.
   socials: [
-    { label: "WhatsApp", href: "https://wa.me/62895372691601" },
-    { label: "Email", href: "mailto:zulhakimaziz778@gmail.com" },
+    { label: "WhatsApp", href: "https://wa.me/62895372691601", handle: "+62 895-3726-91601", show: true },
+    { label: "Instagram", href: "", handle: "", show: false },
+    { label: "TikTok", href: "", handle: "", show: false },
+    { label: "YouTube", href: "", handle: "", show: false },
+    { label: "Vimeo", href: "", handle: "", show: false },
+    { label: "Behance", href: "", handle: "", show: false },
+    { label: "LinkedIn", href: "", handle: "", show: false },
+    { label: "Pinterest", href: "", handle: "", show: false },
+    { label: "Dribbble", href: "", handle: "", show: false },
+    { label: "Threads", href: "", handle: "", show: false },
+    { label: "X", href: "", handle: "", show: false },
+    { label: "Facebook", href: "", handle: "", show: false },
   ],
 };
+
+export const socialLinks = () => site.socials.filter((s) => s.show && s.href);
 
 // Halaman tiap disiplin (/work/<slug>/). `palette` juga mewarnai section Work di beranda saat di-hover
 // (atau saat barisnya di tengah layar di HP). Video & Design: isi `shots` + `hero` lalu hapus status "soon".
@@ -108,6 +151,9 @@ export const categories = {
 const shots = (dir, name, files) =>
   files.map(([file, width, height]) => ({ src: `/work/${dir}/${file}.webp`, width, height, alt: `${name}, photo ${file}` }));
 
+// Brand dari CV yang karyanya belum masuk: halaman dan linknya otomatis aktif begitu `photo`/`video`/`design` diisi
+const pending = (slug, name) => ({ slug, name, photo: [], video: [], design: [] });
+
 // Foto brand yang sama dengan foto lepas di categories.photo.shots dipakai ulang dari sana
 const legacy = (n) => categories.photo.shots.find((shot) => shot.src === `/work/photo/${n}.webp`);
 
@@ -141,7 +187,27 @@ export const brands = [
     video: [],
     design: [],
   },
+  // Dari CV (assets menyusul)
+  pending("fitnation", "FitNation"),
+  pending("tzuyu-skincare", "Tzuyu Skincare"),
+  pending("starphone-semarang", "Starphone Semarang"),
+  pending("salwa-official", "Salwa Official"),
+  pending("disdikbud-kalbar", "Dinas Pendidikan dan Kebudayaan Kalimantan Barat"),
+  pending("cantik-clinic", "Cantik Clinic"),
+  pending("chamomile", "Chamomile"),
+  pending("dna-farmasi", "DNA Farmasi"),
 ];
+
+// Role dan lama kerja brand diambil dari Journey (CV), cover default = foto pertama
+journey.forEach(({ brand: slug, role, period }) => {
+  const brand = brands.find((b) => b.slug === slug);
+  if (!brand) return;
+  brand.role ??= role;
+  brand.duration ??= period.join(" – ");
+});
+brands.forEach((b) => {
+  b.cover ??= b.photo[0] ?? b.design[0];
+});
 
 export const DISCIPLINES = [
   { slug: "photo", title: "Photo" },
@@ -152,14 +218,17 @@ export const DISCIPLINES = [
 // Disiplin yang dimiliki sebuah brand (berurutan: Photo, Video, Design)
 export const disciplinesOf = (brand) => DISCIPLINES.filter((d) => brand[d.slug]?.length);
 
+// Brand yang sudah punya halaman: ada karya (cover otomatis dari foto pertama; brand khusus video perlu `cover` sendiri)
+export const liveBrands = () => brands.filter((b) => b.cover && disciplinesOf(b).length);
+
 // Brand yang punya karya di satu disiplin
-export const brandsWith = (slug) => brands.filter((b) => b[slug]?.length);
+export const brandsWith = (slug) => liveBrands().filter((b) => b[slug]?.length);
 
 // Gabungan semua foto untuk gallery Photo: foto lepas + foto brand yang belum ada di sana.
 // Tiap foto diberi `brand` (slug) kalau milik brand, dipakai untuk filter. Foto tanpa brand hanya tampil di "All".
 export const photoGallery = () => {
   const owner = new Map();
-  brands.forEach((b) => [b.cover, ...b.photo].forEach((p) => owner.set(p.src, b.slug)));
+  brands.forEach((b) => [b.cover, ...b.photo].filter(Boolean).forEach((p) => owner.set(p.src, b.slug)));
 
   const all = [...categories.photo.shots];
   brands.forEach((b) => b.photo.forEach((p) => all.some((s) => s.src === p.src) || all.push(p)));

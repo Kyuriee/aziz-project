@@ -8,6 +8,7 @@ import Marquee from "./Marquee";
 import Works from "./Works";
 import Reel from "./Reel";
 import About from "./About";
+import Journey from "./Journey";
 import Contact from "./Contact";
 
 export default function Experience() {
@@ -21,6 +22,7 @@ export default function Experience() {
         <Works />
         <Reel />
         <About />
+        <Journey />
         <Contact />
       </main>
     </SmoothScroll>

@@ -38,13 +38,12 @@ export default function About() {
         ease: "expo.out",
         scrollTrigger: { trigger: ".about-side", start: "top 85%" },
       });
-      gsap.from(".stat", {
+      gsap.from(".about-note", {
         y: 36,
         opacity: 0,
         duration: 1,
-        stagger: 0.12,
         ease: "expo.out",
-        scrollTrigger: { trigger: ".stats", start: "top 85%" },
+        scrollTrigger: { trigger: ".about-note", start: "top 90%" },
       });
     }, root);
 
@@ -64,14 +63,14 @@ export default function About() {
       <div className="about-grid">
         <p className="about-statement">{site.statement}</p>
 
-        <div className="stats">
-          {site.stats.map((s) => (
-            <div className="stat" key={s.label}>
-              <b>{s.value}</b>
-              <span className="mono">{s.label}</span>
-            </div>
+        <p className="about-note">
+          {site.stats.map((stat, i) => (
+            <span key={stat.label}>
+              <em>{stat.value}</em> {stat.label}
+              {i < site.stats.length - 1 ? ", " : "."}{" "}
+            </span>
           ))}
-        </div>
+        </p>
 
         <div className="about-side">
           {site.capabilities.map((c) => (
@@ -80,6 +79,17 @@ export default function About() {
               <span className="cap-note mono">{c.note}</span>
             </div>
           ))}
+
+          <dl className="facts mono">
+            <div>
+              <dt>Tools</dt>
+              <dd>{site.tools.join(" · ")}</dd>
+            </div>
+            <div>
+              <dt>Languages</dt>
+              <dd>{site.languages.map((l) => `${l.name} (${l.level})`).join(" · ")}</dd>
+            </div>
+          </dl>
         </div>
       </div>
     </section>

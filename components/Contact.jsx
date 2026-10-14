@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "./SmoothScroll";
 import { ArrowUp, ArrowUpRight } from "./Icon";
-import { site } from "@/data/site";
+import { site, socialLinks } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +13,7 @@ export default function Contact() {
   const root = useRef(null);
   const cta = useRef(null);
   const lenis = useLenis();
+  const links = socialLinks();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -30,6 +31,18 @@ export default function Contact() {
         ease: "power3.out",
         scrollTrigger: { trigger: ".contact-cta", start: "top 95%" },
       });
+
+      if (root.current.querySelector(".channels")) {
+        gsap.from(".channels li", {
+          y: 24,
+          opacity: 0,
+          duration: 0.9,
+          stagger: 0.06,
+          ease: "expo.out",
+          clearProps: "opacity,transform", // biar efek redup saat hover (CSS) tidak tertimpa style inline
+          scrollTrigger: { trigger: ".channels", start: "top 92%" },
+        });
+      }
     }, root);
 
     // Efek magnetik pada tombol email (pointer halus saja)
@@ -65,7 +78,7 @@ export default function Contact() {
     <section className="contact" id="contact" ref={root}>
       <div>
         <div className="section-head mono">
-          <span>(03) Contact</span>
+          <span>(04) Contact</span>
           <span>{site.status}</span>
         </div>
 
@@ -75,24 +88,35 @@ export default function Contact() {
           <span className="mask"><span className="line" style={{ visibility: "visible" }}><em>out loud.</em></span></span>
         </h2>
 
-        <a className="contact-cta" href={`mailto:${site.email}`} ref={cta} data-cursor="Send">
-          {site.email} <ArrowUpRight />
-        </a>
+        <div className="contact-row">
+          <div className="contact-main">
+            <a className="contact-cta" href={`mailto:${site.email}`} ref={cta} data-cursor="Send">
+              {site.email} <ArrowUpRight />
+            </a>
 
-        <a className="contact-phone mono" href={`tel:${site.phone}`} data-cursor="Call">
-          {site.phone}
-        </a>
+            <a className="contact-phone mono" href={`tel:${site.phone}`} data-cursor="Call">
+              {site.phone}
+            </a>
+          </div>
+
+          {links.length > 0 && (
+            <ul className="channels" aria-label="Social links">
+              {links.map((s) => (
+                <li key={s.label}>
+                  <a href={s.href} target="_blank" rel="noreferrer" className="ch" data-cursor="Open">
+                    <span className="ch-label">{s.label}</span>
+                    {s.handle && <span className="ch-handle mono">{s.handle}</span>}
+                    <ArrowUpRight />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
 
       <footer className="contact-foot mono">
         <span>© {site.year} {site.name}</span>
-        <ul>
-          {site.socials.map((s) => (
-            <li key={s.label}>
-              <a href={s.href} target="_blank" rel="noreferrer">{s.label}</a>
-            </li>
-          ))}
-        </ul>
         <button
           type="button"
           className="mono back-top"

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useLenis } from "./SmoothScroll";
 import Roll from "./Roll";
-import { site } from "@/data/site";
+import { site, socialLinks } from "@/data/site";
 
 const SECTION_IDS = site.nav.map((item) => item.href.slice(1));
 const HIDE_AFTER = 160; // px scroll sebelum nav boleh menghilang
@@ -73,7 +73,8 @@ export default function Nav() {
   /* ---------- Indikator garis yang meluncur ke link aktif ---------- */
   const moveIndicator = useCallback(() => {
     const link = linksWrap.current?.querySelector(`[data-id="${activeId}"]`);
-    if (!link) {
+    // Tombol CTA sudah punya gaya aktif sendiri: garis penanda tidak perlu
+    if (!link || link.dataset.cta) {
       gsap.to(indicator.current, { opacity: 0, duration: 0.4 });
       return;
     }
@@ -162,7 +163,8 @@ export default function Nav() {
                   key={id}
                   href={item.href}
                   data-id={id}
-                  className={activeId === id ? "is-active" : undefined}
+                  data-cta={item.cta ? "true" : undefined}
+                  className={[item.cta && "nav-cta", activeId === id && "is-active"].filter(Boolean).join(" ") || undefined}
                   aria-current={activeId === id ? "location" : undefined}
                   onClick={(e) => go(e, item.href)}
                 >
@@ -205,7 +207,7 @@ export default function Nav() {
         <div className="menu-foot mono">
           <a href={`mailto:${site.email}`}>{site.email}</a>
           <ul>
-            {site.socials.map((s) => (
+            {socialLinks().map((s) => (
               <li key={s.label}>
                 <a href={s.href} target="_blank" rel="noreferrer">{s.label}</a>
               </li>

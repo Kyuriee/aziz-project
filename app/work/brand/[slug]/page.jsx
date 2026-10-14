@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import BrandPage from "@/components/BrandPage";
-import { brands, disciplinesOf, site } from "@/data/site";
+import { brands, disciplinesOf, liveBrands, site } from "@/data/site";
 
-// Static export: satu halaman per brand, dibuat saat build
+// Static export: satu halaman per brand yang sudah punya karya, dibuat saat build
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return brands.map((brand) => ({ slug: brand.slug }));
+  return liveBrands().map((brand) => ({ slug: brand.slug }));
 }
 
 export async function generateMetadata({ params }) {
