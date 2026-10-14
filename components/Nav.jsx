@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useLenis } from "./SmoothScroll";
 import Roll from "./Roll";
+import { SocialIcon } from "./Icon";
 import { site, socialLinks } from "@/data/site";
 
 const SECTION_IDS = site.nav.map((item) => item.href.slice(1));
@@ -209,7 +210,10 @@ export default function Nav() {
           <ul>
             {socialLinks().map((s) => (
               <li key={s.label}>
-                <a href={s.href} target="_blank" rel="noreferrer">{s.label}</a>
+                <a href={s.href} target="_blank" rel="noreferrer">
+                  <SocialIcon name={s.label} />
+                  {s.label}
+                </a>
               </li>
             ))}
           </ul>

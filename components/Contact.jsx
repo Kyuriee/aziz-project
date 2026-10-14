@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "./SmoothScroll";
-import { ArrowUp, ArrowUpRight } from "./Icon";
+import { ArrowUp, ArrowUpRight, SocialIcon } from "./Icon";
 import { site, socialLinks } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -104,6 +104,7 @@ export default function Contact() {
               {links.map((s) => (
                 <li key={s.label}>
                   <a href={s.href} target="_blank" rel="noreferrer" className="ch" data-cursor="Open">
+                    <SocialIcon name={s.label} />
                     <span className="ch-label">{s.label}</span>
                     {s.handle && <span className="ch-handle mono">{s.handle}</span>}
                     <ArrowUpRight />

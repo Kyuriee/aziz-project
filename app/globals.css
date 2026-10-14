@@ -136,6 +136,8 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .menu-link:hover .menu-title, .menu-link:focus-visible .menu-title { font-style: italic; transform: translateX(0.4rem); }
 .menu-foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem 2rem; padding-top: 1.25rem; color: var(--mute); }
 .menu-foot ul { display: flex; gap: 1.5rem; }
+.menu-foot a { display: inline-flex; align-items: center; gap: 0.6em; }
+.menu-foot svg { width: 1.2em; height: 1.2em; flex: none; }
 .menu-foot a:hover { color: var(--paper); }
 
 /* ---------- Cursor ---------- */
@@ -425,8 +427,11 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .channels li:last-child .ch { border-bottom: 1px solid var(--line); }
 .ch-label { flex: 1; font-weight: 500; font-size: clamp(1.2rem, 1.9vw, 1.8rem); letter-spacing: -0.02em; }
 .ch-handle { color: var(--mute); text-align: right; overflow-wrap: anywhere; }
-.ch svg { flex: none; align-self: center; transition: transform 0.5s var(--ease); }
-.ch:hover svg, .ch:focus-visible svg { transform: translate(0.15em, -0.15em); }
+.ch > svg { flex: none; align-self: center; }
+.ch > svg:first-child { width: 1.4rem; height: 1.4rem; margin-right: 0.35rem; color: var(--mute); transition: color 0.4s var(--ease); } /* ikon brand */
+.ch:hover > svg:first-child, .ch:focus-visible > svg:first-child { color: var(--paper); }
+.ch > svg:last-child { transition: transform 0.5s var(--ease); } /* panah */
+.ch:hover > svg:last-child, .ch:focus-visible > svg:last-child { transform: translate(0.15em, -0.15em); }
 @media (hover: hover) {
   .channels:hover .ch { opacity: 0.35; }
   .channels .ch:hover { opacity: 1; }
