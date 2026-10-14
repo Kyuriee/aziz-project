@@ -6,6 +6,7 @@ import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/500.css";
 import "./globals.css";
 import { site } from "@/data/site";
+import PageCurtain from "@/components/PageCurtain";
 
 
 // String.raw: backslash tetap utuh di dalam script inline
@@ -46,6 +47,7 @@ export default function RootLayout({ children }) {
           <style>{`.line{visibility:visible!important}`}</style>
         </noscript>
         {children}
+        <PageCurtain />
       </body>
     </html>
   );

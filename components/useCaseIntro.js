@@ -35,6 +35,11 @@ export default function useCaseIntro(root) {
           scrollTrigger: { trigger: el, start: "top 88%" },
         });
       });
+
+      // Tipografi kinetik: judul section berkontur bergeser pelan mengikuti scroll
+      gsap.utils.toArray(".sec-title").forEach((el) => {
+        gsap.fromTo(el, { xPercent: -5 }, { xPercent: 5, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true } });
+      });
     }, root);
 
     return () => ctx.revert();

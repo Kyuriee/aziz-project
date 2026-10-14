@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import SmoothScroll from "./SmoothScroll";
 import Cursor from "./Cursor";
@@ -8,6 +8,7 @@ import CaseNav from "./CaseNav";
 import Gallery from "./Gallery";
 import Roll from "./Roll";
 import useCaseIntro from "./useCaseIntro";
+import usePalette from "./usePalette";
 import { ArrowLeft, ArrowRight } from "./Icon";
 import { photoGallery, site } from "@/data/site";
 
@@ -29,25 +30,13 @@ export default function CaseStudy({ slug, data }) {
     { label: "Role", value: data.role },
   ];
 
-  // Palet khusus: warnai juga body supaya area overscroll tidak hitam
-  useEffect(() => {
-    if (!palette) return;
-    document.body.style.background = palette.bg;
-    return () => {
-      document.body.style.background = "";
-    };
-  }, [palette]);
-
+  const page = usePalette(palette);
   useCaseIntro(root);
 
   return (
     <SmoothScroll locked={false}>
       <Cursor />
-      <div
-        className={`case${palette ? " has-palette" : ""}`}
-        style={palette ? { "--ink": palette.bg, "--paper": palette.fg, "--mute": palette.mute, "--line": palette.line, "--accent": palette.accent } : undefined}
-        ref={root}
-      >
+      <div className={page.className} style={page.style} ref={root}>
         <CaseNav label={data.title[0]} />
 
         <main>

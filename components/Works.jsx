@@ -5,13 +5,13 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "./Icon";
-import { categories, site } from "@/data/site";
+import { brandsWith, categories, journey, site } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const pad = (n) => String(n).padStart(2, "0");
 const works = site.works;
-const REVEAL = ".ph, .film-col, .film-ring, .sh"; // item yang muncul bertahap saat scroll
+const REVEAL = ".ph, .film-col, .film-ring, .fd"; // item yang muncul bertahap saat scroll
 
 /* ---------- Visual tiap disiplin (semuanya dekoratif) ---------- */
 
@@ -56,15 +56,18 @@ function FilmVisual() {
   );
 }
 
-// Komposisi bentuk + huruf: teaser desain sampai karya ada
-function ShapesVisual() {
+// Teaser Design: tile feed bertipografi dari nama brand di CV (sampai karya masuk)
+function FeedVisual() {
+  const speeds = [1.2, 2, 3, 1.6, 2.4];
+  const tiles = journey.filter((j) => j.brand && j.company.length <= 20).slice(0, speeds.length);
   return (
     <div className="visual" aria-hidden="true">
-      <div className="sh sh-circle" data-speed="1.4"><i /></div>
-      <div className="sh sh-square" data-speed="2.4"><i /></div>
-      <div className="sh sh-dots" data-speed="1"><i /></div>
-      <div className="sh sh-line" data-speed="1.8"><i /></div>
-      <div className="sh sh-aa" data-speed="3"><span>Aa</span></div>
+      {tiles.map((j, i) => (
+        <div className={`fd fd-${i + 1}`} data-speed={speeds[i]} key={j.brand}>
+          <span className="fd-idx mono">{pad(i + 1)}</span>
+          <span className="fd-name">{j.company}</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -72,13 +75,14 @@ function ShapesVisual() {
 function Visual({ work }) {
   if (work.visual === "photos") return <PhotoVisual images={work.images} />;
   if (work.visual === "film") return <FilmVisual />;
-  return <ShapesVisual />;
+  return <FeedVisual />;
 }
 
 /* ---------- Satu panel = satu disiplin ---------- */
 function Panel({ work }) {
   const palette = categories[work.slug]?.palette;
   const soon = work.status === "soon";
+  const count = soon ? 0 : brandsWith(work.slug).length;
   const href = `/work/${work.slug}/`;
   const vars = palette ? { "--p-bg": palette.bg, "--p-fg": palette.fg, "--accent": palette.accent } : undefined;
 
@@ -97,7 +101,10 @@ function Panel({ work }) {
       </h3>
 
       <div className="dis-info">
-        <p className="dis-kind mono">{work.kind}</p>
+        <p className="dis-kind mono">
+          <span>{work.kind}</span>
+          {count > 0 && <span className="dis-count">{pad(count)} {count === 1 ? "brand" : "brands"}</span>}
+        </p>
         {soon ? (
           <span className="dis-soon mono">Soon</span>
         ) : (

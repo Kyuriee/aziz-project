@@ -9,6 +9,7 @@ import Gallery from "./Gallery";
 import VideoEmbed from "./VideoEmbed";
 import Roll from "./Roll";
 import useCaseIntro from "./useCaseIntro";
+import usePalette from "./usePalette";
 import { ArrowLeft, ArrowRight } from "./Icon";
 import { disciplinesOf, liveBrands, site } from "@/data/site";
 
@@ -65,6 +66,7 @@ function SectionTabs({ sections, brand }) {
 export default function BrandPage({ brand }) {
   const root = useRef(null);
   useCaseIntro(root);
+  const page = usePalette(brand.palette);
 
   const disciplines = disciplinesOf(brand);
   const sections = SECTION_ORDER.map((slug) => disciplines.find((d) => d.slug === slug)).filter(Boolean);
@@ -81,7 +83,7 @@ export default function BrandPage({ brand }) {
     <SmoothScroll>
       <Cursor />
       <HashJump />
-      <div className="case" ref={root}>
+      <div className={page.className} style={page.style} ref={root}>
         <CaseNav label={brand.name} />
 
         <main>
@@ -129,7 +131,10 @@ export default function BrandPage({ brand }) {
           {sections.length > 1 && <SectionTabs sections={sections} brand={brand} />}
 
           {sections.map((d) => (
-            <section className="brand-section" id={d.slug} key={d.slug} aria-label={d.title}>
+            <section className="brand-section" id={d.slug} key={d.slug}>
+              <h2 className="sec-title reveal">
+                {d.title} <sup className="mono">{String(brand[d.slug].length).padStart(2, "0")}</sup>
+              </h2>
               {d.slug === "video" ? (
                 <div className="brand-videos">
                   {brand.video.map((video) => (
@@ -150,6 +155,7 @@ export default function BrandPage({ brand }) {
                 {next.name} <ArrowRight />
               </span>
               <span className="case-next-meta mono">{disciplinesOf(next).map((d) => d.title).join(" · ")}</span>
+              <img className="case-next-img" src={next.cover.src} width={next.cover.width} height={next.cover.height} alt="" loading="lazy" decoding="async" />
             </Link>
           )}
           <div className="case-foot-row mono">

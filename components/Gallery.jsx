@@ -1,11 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lightbox from "./Lightbox";
 import VideoEmbed from "./VideoEmbed";
 import { ArrowUpRight } from "./Icon";
 import { brands } from "@/data/site";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const pad = (n) => String(n).padStart(2, "0");
 
 // Pilihan kolom: cols = [desktop, mobile]; hideSm = tombol disembunyikan di mobile (hasil kolomnya sama dengan yang lain)
 const DENSITIES = {
@@ -59,6 +65,9 @@ export default function Gallery({ items, kind = "photo", filterable = false, sti
   const [density, setDensity] = useState(DEFAULT_DENSITY[kind]);
   const [open, setOpen] = useState(null);
   const isMobile = useIsMobile();
+  const grid = useRef(null);
+  // idle (sebelum hidrasi, grid tersembunyi) -> armed (item muncul saat di-scroll) | ready (reduced-motion: langsung tampil)
+  const [mode, setMode] = useState("idle");
 
   const owners = useMemo(() => brands.filter((b) => items.some((i) => i.brand === b.slug)), [items]);
   const visible = useMemo(() => (brand ? items.filter((i) => i.brand === brand) : items), [items, brand]);
@@ -74,6 +83,38 @@ export default function Gallery({ items, kind = "photo", filterable = false, sti
     if (filterable && owners.some((b) => b.slug === fromUrl)) setBrand(fromUrl);
   }, [filterable, owners]);
 
+  useEffect(() => {
+    setMode(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "ready" : "armed");
+  }, []);
+
+  // Item muncul (tirai naik + foto mengendap) saat masuk layar; dipasang ulang tiap susunan kolom berubah
+  useEffect(() => {
+    if (mode !== "armed") return;
+    const observer = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-in");
+          observer.unobserve(entry.target);
+        }),
+      { rootMargin: "0px 0px -8% 0px" }
+    );
+    grid.current.querySelectorAll(".gal-item:not(.is-in)").forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [mode, columns]);
+
+  // Kedalaman: kolom genap bergeser pelan berlawanan arah saat scroll (hanya foto, hanya desktop)
+  useEffect(() => {
+    if (mode !== "armed" || isMobile || kind !== "photo") return;
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray(".gal-col").forEach((col, i) => {
+        if (i % 2 === 0) return;
+        gsap.fromTo(col, { y: 70 }, { y: -70, ease: "none", scrollTrigger: { trigger: grid.current, start: "top bottom", end: "bottom top", scrub: true } });
+      });
+    }, grid);
+    return () => ctx.revert();
+  }, [mode, isMobile, kind, columns]);
+
   const select = (slug) => {
     setBrand(slug);
     const url = new URL(window.location.href);
@@ -83,7 +124,7 @@ export default function Gallery({ items, kind = "photo", filterable = false, sti
   };
 
   return (
-    <div className="gal">
+    <div className={`gal${mode === "idle" ? "" : " is-ready"}${mode === "armed" ? " is-armed" : ""}`}>
       {(showChips || showDensity) && (
       <div className={`gal-bar${sticky ? " is-sticky" : ""}`}>
         {showChips && (
@@ -123,12 +164,12 @@ export default function Gallery({ items, kind = "photo", filterable = false, sti
       </div>
       )}
 
-      <div className="gal-grid">
+      <div className="gal-grid" ref={grid}>
         {columns.map((column, c) => (
           <ul className="gal-col" key={c}>
             {column.map((item) =>
               kind === "video" ? (
-                <li className="gal-item" key={item.vimeo.id}>
+                <li className="gal-item" style={{ "--d": `${c * 90}ms` }} key={item.vimeo.id}>
                   {/* Banyak video di satu halaman: tidak diputar otomatis, mulai saat diklik */}
                   <VideoEmbed video={{ ...item, autoplay: false }} label={brandName(item.brand)} />
                   {item.brand && (
@@ -139,9 +180,12 @@ export default function Gallery({ items, kind = "photo", filterable = false, sti
                   )}
                 </li>
               ) : (
-                <li className="gal-item" key={item.src}>
+                <li className="gal-item" style={{ "--d": `${c * 90}ms` }} key={item.src}>
                   <button type="button" className="gal-photo" onClick={() => setOpen(visible.indexOf(item))} data-cursor="View" aria-haspopup="dialog">
                     <img src={item.src} width={item.width} height={item.height} alt={item.alt} loading="lazy" decoding="async" />
+                    <span className="gal-tag mono" aria-hidden="true">
+                      {pad(visible.indexOf(item) + 1)} / {pad(visible.length)}
+                    </span>
                   </button>
                 </li>
               )

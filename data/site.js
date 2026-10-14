@@ -49,11 +49,11 @@ export const site = {
 
   // Tiga disiplin (panggung di section Work). Punya halaman sendiri kalau `categories[slug]` berisi foto/karya.
   // status: "soon" = belum ada karya: tampil di panggung tapi belum bisa dibuka.
-  // visual: "photos" (pakai `images`) | "film" (pita dari site.reel.frames) | "shapes" (bentuk + huruf)
+  // visual: "photos" (pakai `images`) | "film" (pita dari site.reel.frames) | "feed" (tile bertipografi dari brand di `journey`)
   works: [
     { slug: "photo", title: "Photo", kind: "Product · Portrait · Lifestyle", visual: "photos", images: [{ src: "/work/photo/hero.webp", width: 1552, height: 2328 }, { src: "/work/photo/02.webp", width: 1100, height: 1954 }, { src: "/work/photo/14.webp", width: 2600, height: 1734 }, { src: "/work/photo/04.webp", width: 1529, height: 2292 }], href: "#work" },
     { slug: "video", title: "Video", kind: "Shoot · Edit · Grade", visual: "film" },
-    { slug: "design", title: "Design", kind: "Layout · Identity · Social", visual: "shapes", status: "soon", href: "#work" },
+    { slug: "design", title: "Design", kind: "Layout · Identity · Social", visual: "feed", status: "soon", href: "#work" },
   ],
 
   // Reel: foto-foto ini berganti mengikuti scroll (pakai file di public/)
@@ -98,8 +98,8 @@ export const site = {
 
 export const socialLinks = () => site.socials.filter((s) => s.show && s.href);
 
-// Halaman tiap disiplin (/work/<slug>/). `palette` juga mewarnai section Work di beranda saat di-hover
-// (atau saat barisnya di tengah layar di HP). Video & Design: isi `shots` + `hero` lalu hapus status "soon".
+// Halaman tiap disiplin (/work/<slug>/). `palette` mewarnai panggung Work di beranda dan halaman disiplinnya.
+// Design memakai hitam-putih situs; Photo dan Video membawa warna dari karya (krem dan merah dari HEIU/Nez, hitam sinematik). Video & Design: isi `shots` + `hero` lalu hapus status "soon".
 // `shots` = foto lepas di gallery Photo; foto milik brand otomatis ikut (lihat photoGallery di bawah).
 export const categories = {
   photo: {
@@ -138,7 +138,7 @@ export const categories = {
     palette: { bg: "#0b0708", fg: "#f3ece9", mute: "#7f7a79", line: "rgba(243, 236, 233, 0.2)", accent: "#e5322d" },
   },
   design: {
-    palette: { bg: "#d8dde6", fg: "#0c1222", mute: "#5a5f6c", line: "rgba(12, 18, 34, 0.2)", accent: "#2f4bff" },
+    palette: { bg: "#f3f3f1", fg: "#050505", mute: "#6b6b67", line: "rgba(5, 5, 5, 0.18)", accent: "#050505" },
   },
 };
 
@@ -160,6 +160,8 @@ const legacy = (n) => categories.photo.shots.find((shot) => shot.src === `/work/
 export const brands = [
   {
     slug: "nez-coffeeneatery",
+    // Palet halaman brand diambil dari warna cover (krem pucat + oranye minuman)
+    palette: { bg: "#ece9e2", fg: "#1c1710", mute: "#6d675d", line: "rgba(28, 23, 16, 0.2)", accent: "#c4660a" },
     name: "Nez Coffeeneatery",
     cover: shots("nez-coffeeneatery", "Nez Coffeeneatery", [["hero", 1100, 1375]])[0],
     photo: [
@@ -173,6 +175,8 @@ export const brands = [
   },
   {
     slug: "heiu",
+    // Palet halaman brand diambil dari warna cover (krem kaos + merah cetakan)
+    palette: { bg: "#d9c3a8", fg: "#1d120d", mute: "#5f5043", line: "rgba(29, 18, 13, 0.22)", accent: "#c8281f" },
     name: "HEIU",
     cover: legacy("03"),
     photo: [...shots("heiu", "HEIU", [["01", 930, 1392], ["02", 1080, 1616]]), legacy("19"), legacy("07")],
@@ -181,6 +185,8 @@ export const brands = [
   },
   {
     slug: "bintang-zero",
+    // Palet halaman brand diambil dari warna cover (navy gelap + merah bintang)
+    palette: { bg: "#0a0f1c", fg: "#f1efe9", mute: "#8a90a0", line: "rgba(241, 239, 233, 0.18)", accent: "#e0343c" },
     name: "Bintang Zero",
     cover: legacy("02"),
     photo: shots("bintang-zero", "Bintang Zero", [["01", 1100, 1955], ["02", 2000, 1125], ["03", 2000, 1125]]),
