@@ -32,9 +32,8 @@ Tiap brand di CV sudah punya slug di `brands` (`data/site.js`) dengan `photo/vid
 2. `npm install` (sekali), lalu `npm run images -- <slug>` untuk convert ke WebP + compress ke `public/work/<slug>/`.
 3. Tempel baris `shots(...)` yang dicetak ke `photo` (atau `design`) brand itu. Video tetap lewat Vimeo (`vimeo: { id, hash }`).
 
-## Tambah karya ke Photo
-1. Taruh foto (webp, lebar maks ~2000px) di `public/work/photo/`.
-2. Tambah baris di `categories.photo.shots` dengan `pos` (posisi di galeri): `wide`, `pa`/`pb`, `qa`/`qb`, atau `t1`/`t2`/`t3` (lihat `.pos-*` di `app/globals.css`).
+## Tambah foto ke Photo
+Foto selalu milik sebuah brand: taruh di `public/work/<slug-brand>/` (pakai `npm run images -- <slug>`) dan tambahkan ke `photo` brand itu di `brands`. Galeri `/work/photo` mengumpulkan semua foto brand otomatis, lengkap dengan filter brand. `categories.photo.shots` hanya untuk foto lepas tanpa brand.
 
 ## Aktifkan Video atau Design
 Isi `categories.video` (atau `design`) dengan `title`, `kind`, `role`, `brief`, `hero`, `shots`; lalu hapus `status: "soon"` di `site.works`. Palet `palette` sudah ada dan dipakai untuk efek warna saat hover di daftar Work.

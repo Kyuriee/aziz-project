@@ -28,5 +28,5 @@ export default async function WorkPage({ params }) {
   const { slug } = await params;
   const item = categories[slug];
   if (!item || !hasWork(slug, item)) notFound();
-  return item.shots?.length ? <CaseStudy slug={slug} data={item} /> : <DisciplinePage data={item} />;
+  return item.layout === "gallery" ? <CaseStudy slug={slug} data={item} /> : <DisciplinePage data={item} />;
 }
