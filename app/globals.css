@@ -672,3 +672,67 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 @media (prefers-reduced-motion: reduce) {
   .lb[open], .lb-img { animation: none; }
 }
+
+/* ---------- Halaman Photo: tumpukan cetakan per brand ---------- */
+/* Satu bab = satu layar yang di-pin; warna bab dari palet brand (--p-bg, --p-fg, --p-acc diisi inline). */
+.pt .nav.is-static { z-index: 60; background: transparent; border: 0; mix-blend-mode: difference; color: #fff; }
+
+.pt-chapter {
+  position: relative; display: grid; place-items: center; height: 100vh; height: 100svh; min-height: 520px;
+  overflow: hidden; perspective: 1400px; background: var(--p-bg); color: var(--p-fg);
+}
+.pt-chapter ::selection { background: var(--p-fg); color: var(--p-bg); }
+
+/* Nama brand sebagai kontur raksasa di belakang tumpukan; digeser GSAP */
+.pt-name {
+  position: absolute; left: 0; top: 50%; translate: 0 -50%; white-space: nowrap; pointer-events: none; will-change: transform;
+  font-family: var(--sans-outline); font-weight: 800; text-transform: uppercase; letter-spacing: -0.045em; line-height: 0.8;
+  font-size: clamp(6rem, 30vw, 30rem); color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--p-fg) 55%, transparent);
+}
+
+.pt-stack { position: relative; display: grid; place-items: center; width: min(88vw, 62rem); height: min(72svh, 56rem); transform-style: preserve-3d; }
+
+/* Satu cetakan: bingkai putih/gelap dari warna teks brand; tinggi dibatasi layar dan lebar tumpukan */
+.pt-print {
+  grid-area: 1 / 1; z-index: calc(100 - var(--i));
+  height: min(100%, calc(min(88vw, 62rem) / var(--r))); aspect-ratio: var(--r);
+  border: clamp(5px, 0.8vw, 9px) solid var(--p-fg); background: var(--p-fg);
+  box-shadow: 0 2.2rem 3.5rem -1.6rem rgb(0 0 0 / 0.5), 0 0.4rem 0.9rem rgb(0 0 0 / 0.18);
+}
+.pt-print img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pt-chapter.is-live .pt-print { will-change: transform; } /* lapisan GPU hanya untuk bab yang sedang tampil */
+
+/* Satu tombol transparan di atas tumpukan: buka viewer di foto teratas */
+.pt-open { position: absolute; inset: 0; z-index: 200; background: none; border: 0; cursor: pointer; }
+
+.pt-foot {
+  position: absolute; z-index: 5; inset: auto var(--pad) clamp(1.1rem, 3vh, 2rem);
+  display: flex; align-items: flex-end; justify-content: space-between; pointer-events: none;
+}
+.pt-ticks { display: flex; align-items: flex-end; gap: 5px; height: 22px; }
+.pt-tick { display: block; width: 2px; height: 10px; background: currentColor; opacity: 0.3; transition: height 0.5s var(--ease), opacity 0.5s var(--ease), background-color 0.5s var(--ease); }
+.pt-tick.is-on { height: 22px; opacity: 1; background: var(--p-acc); }
+.pt-go {
+  display: grid; place-items: center; width: 3rem; height: 3rem; font-size: 1.2rem; pointer-events: auto;
+  border: 1px solid currentColor; border-radius: 50%; transition: background-color 0.5s var(--ease), color 0.5s var(--ease);
+}
+.pt-go:hover, .pt-go:focus-visible { background: var(--p-fg); color: var(--p-bg); }
+
+.pt-cue { position: absolute; left: 50%; bottom: clamp(1.1rem, 3vh, 2rem); translate: -50% 0; transition: opacity 0.5s var(--ease); }
+.pt-cue i { background: color-mix(in srgb, currentColor 25%, transparent); }
+.pt-cue i::after { background: currentColor; }
+.pt-cue.is-off { opacity: 0; }
+
+/* Rel brand di tepi kanan: titik per brand, yang aktif memanjang. Difference supaya terbaca di semua warna bab */
+.pt-rail { position: fixed; z-index: 55; right: clamp(0.25rem, 1.4vw, 1.2rem); top: 50%; translate: 0 -50%; display: grid; color: #fff; mix-blend-mode: difference; }
+.pt-rail button { display: grid; place-items: center; width: 2.75rem; height: 2.25rem; background: none; border: 0; color: inherit; cursor: pointer; }
+.pt-rail i { display: block; width: 7px; height: 7px; border: 1px solid currentColor; border-radius: 999px; transition: height 0.5s var(--ease), background-color 0.5s var(--ease); }
+.pt-rail button[aria-current="true"] i { height: 22px; background: currentColor; }
+
+/* Reduced motion: tanpa pin, tiap bab jadi baris foto yang digeser menyamping */
+.pt-chapter.is-still { display: block; height: auto; min-height: 100svh; padding: 6rem 0 3rem; overflow: visible; perspective: none; }
+.is-still .pt-name { position: static; translate: none; display: block; margin-bottom: 1.5rem; padding: 0 var(--pad); font-size: clamp(3rem, 14vw, 9rem); }
+.is-still .pt-stack { display: flex; gap: 1rem; width: auto; height: auto; padding: 0 var(--pad); overflow-x: auto; scroll-snap-type: x mandatory; }
+.is-still .pt-print { flex: none; height: min(62svh, calc((100vw - 2.5rem) / var(--r))); scroll-snap-align: center; transform: none; }
+.is-still .pt-foot { position: static; margin-top: 1.5rem; }

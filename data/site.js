@@ -100,7 +100,7 @@ export const socialLinks = () => site.socials.filter((s) => s.show && s.href);
 
 // Halaman tiap disiplin (/work/<slug>/). `palette` mewarnai panggung Work di beranda dan halaman disiplinnya.
 // Netral mengikuti hero: Photo = paper yang sama dengan hero, Video = ink, Design = abu beton. Warna datang dari foto/video-nya. Video & Design: isi `shots` + `hero` lalu hapus status "soon".
-// Foto milik brand otomatis ikut ke galeri Photo (lihat photoGallery di bawah); `shots` hanya untuk foto lepas tanpa brand.
+// Foto milik brand otomatis ikut ke halaman Photo (lihat photoChapters di bawah); `shots` hanya untuk foto lepas tanpa brand.
 export const categories = {
   photo: {
     title: ["Photo", "Selected frames"],
@@ -109,7 +109,7 @@ export const categories = {
     brief: "Light first. Skin, product, mood.",
     palette: { bg: "#f3f3f1", fg: "#050505", mute: "#6b6b67", line: "rgba(5, 5, 5, 0.18)", accent: "#050505" },
     hero: { src: "/work/tzuyu-skincare/hero.webp", width: 1332, height: 1996, alt: "Model with eyes closed holding a pink bottle against her cheek in a white sleeveless top" },
-    shots: [], // foto lepas tanpa brand (kosong: semua foto sudah milik brand dan otomatis ikut ke galeri)
+    shots: [], // foto lepas tanpa brand (kosong: semua foto sudah milik brand dan otomatis ikut ke halaman Photo)
     layout: "gallery", // halaman galeri dengan filter brand; tanpa ini, halaman disiplin berupa daftar brand
   },
   video: {
@@ -258,16 +258,16 @@ export const liveBrands = () => brands.filter((b) => b.cover && disciplinesOf(b)
 // Brand yang punya karya di satu disiplin
 export const brandsWith = (slug) => liveBrands().filter((b) => b[slug]?.length);
 
-// Gabungan semua foto untuk gallery Photo: foto lepas + foto brand yang belum ada di sana.
-// Tiap foto diberi `brand` (slug) kalau milik brand, dipakai untuk filter. Foto tanpa brand hanya tampil di "All".
-export const photoGallery = () => {
-  const owner = new Map();
-  brands.forEach((b) => [b.cover, ...b.photo].filter(Boolean).forEach((p) => owner.set(p.src, b.slug)));
-
-  const all = [...categories.photo.shots];
-  brands.forEach((b) => [b.cover, ...b.photo].filter(Boolean).forEach((p) => all.some((s) => s.src === p.src) || all.push(p)));
-  return all.map((p) => ({ ...p, brand: owner.get(p.src) }));
-};
+// Bab halaman Photo: satu brand = satu bab. Cover jadi foto pertama, lalu foto brand; tiap foto membawa slug brand-nya.
+export const photoChapters = () =>
+  brands
+    .filter((b) => b.photo.length)
+    .map((brand) => ({
+      brand,
+      frames: [brand.cover, ...brand.photo]
+        .filter((p, i, all) => p && all.findIndex((q) => q?.src === p.src) === i)
+        .map((p) => ({ ...p, brand: brand.slug })),
+    }));
 
 // Semua video lintas brand untuk gallery Video
 export const videoGallery = () => brands.flatMap((b) => b.video.map((v) => ({ ...v, brand: b.slug })));

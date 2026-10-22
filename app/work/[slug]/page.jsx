@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import CaseStudy from "@/components/CaseStudy";
 import DisciplinePage from "@/components/DisciplinePage";
+import PhotoStage from "@/components/PhotoStage";
 import { brandsWith, categories, site } from "@/data/site";
 
 // Halaman dibuat hanya untuk disiplin yang sudah punya karya: galeri sendiri (shots) atau brand yang memuatnya
@@ -28,5 +28,5 @@ export default async function WorkPage({ params }) {
   const { slug } = await params;
   const item = categories[slug];
   if (!item || !hasWork(slug, item)) notFound();
-  return item.layout === "gallery" ? <CaseStudy slug={slug} data={item} /> : <DisciplinePage data={item} />;
+  return item.layout === "gallery" ? <PhotoStage /> : <DisciplinePage data={item} />;
 }

@@ -33,7 +33,7 @@ Tiap brand di CV sudah punya slug di `brands` (`data/site.js`) dengan `photo/vid
 3. Tempel baris `shots(...)` yang dicetak ke `photo` (atau `design`) brand itu. Video tetap lewat Vimeo (`vimeo: { id, hash }`).
 
 ## Tambah foto ke Photo
-Foto selalu milik sebuah brand: taruh di `public/work/<slug-brand>/` (pakai `npm run images -- <slug>`) dan tambahkan ke `photo` brand itu di `brands`. Galeri `/work/photo` mengumpulkan semua foto brand otomatis, lengkap dengan filter brand. `categories.photo.shots` hanya untuk foto lepas tanpa brand.
+Foto selalu milik sebuah brand: taruh di `public/work/<slug-brand>/` (pakai `npm run images -- <slug>`) dan tambahkan ke `photo` brand itu di `brands`. Halaman `/work/photo` (`components/PhotoStage.jsx`) membuat satu bab per brand yang punya foto: cover jadi foto pertama, lalu foto brand, bertumpuk seperti cetakan dan terlempar satu per satu saat scroll. Warna bab dari `palette` brand. Foto lepas tanpa brand: `categories.photo.shots` (belum ditampilkan di halaman Photo).
 
 ## Aktifkan Video atau Design
 Isi `categories.video` (atau `design`) dengan `title`, `kind`, `role`, `brief`, `hero`, `shots`; lalu hapus `status: "soon"` di `site.works`. Palet `palette` sudah ada dan dipakai untuk efek warna saat hover di daftar Work.
