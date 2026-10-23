@@ -239,13 +239,14 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 /* Tinggi pembungkus dan layar sticky WAJIB stabil (lvh, bukan dvh): kalau berubah saat toolbar HP menciut, posisi ScrollTrigger lain (Reel) jadi basi */
 .stage.is-pinned { height: calc(var(--n) * 110vh + 100vh); height: calc(var(--n) * 110lvh + 100lvh); }
 .is-pinned .stage-sticky { position: sticky; top: 0; height: 100vh; height: 100lvh; overflow: hidden; }
-.is-pinned .dis { position: absolute; inset: 0; height: auto; min-height: 0; background: none; color: inherit; }
+/* Isi panel setinggi layar terlihat (svh), menempel di atas: elemen bawah tidak jatuh di balik toolbar HP (sticky-nya lvh) */
+.is-pinned .dis { position: absolute; inset: 0 0 auto 0; height: 100vh; height: 100svh; min-height: 0; background: none; color: inherit; }
 .is-pinned .stage-head {
   display: grid; grid-template-columns: 1fr auto 1fr; position: absolute; top: 5.5rem; left: var(--pad); right: var(--pad); z-index: 5;
   opacity: 0.7; font-variant-numeric: tabular-nums;
 }
 .is-pinned .stage-head span:last-child { text-align: right; }
-.is-pinned .stage-bar { display: block; position: absolute; left: var(--pad); right: var(--pad); bottom: 1.25rem; height: 1px; z-index: 5; }
+.is-pinned .stage-bar { display: block; position: absolute; left: var(--pad); right: var(--pad); top: calc(100vh - 1.25rem); top: calc(100svh - 1.25rem); height: 1px; z-index: 5; }
 .stage-bar::before { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0.2; }
 .stage-bar i { position: absolute; inset: 0; background: currentColor; transform: scaleX(0); transform-origin: left; }
 
@@ -260,24 +261,29 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 
 .dis-info { position: absolute; left: var(--pad); top: clamp(8rem, 19svh, 12rem); z-index: 4; display: grid; gap: 1.25rem; justify-items: start; }
 .dis-kind { display: grid; gap: 0.35rem; opacity: 0.75; }
-.dis-cta {
-  display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.9rem 1.6rem; border: 1px solid currentColor; border-radius: 999px;
-  font-family: var(--sans); font-size: 1.05rem; letter-spacing: -0.01em;
+.dis-go {
+  display: grid; place-items: center; width: 3.25rem; height: 3.25rem; font-size: 1.3rem; border: 1px solid currentColor; border-radius: 50%;
   transition: background-color 0.5s var(--ease), border-color 0.5s var(--ease), color 0.5s var(--ease);
 }
-.dis-cta:hover, .dis-cta:focus-visible { background-color: var(--accent); border-color: var(--accent); color: var(--p-bg, var(--ink)); }
+.dis-go:hover, .dis-go:focus-visible { background-color: var(--accent); border-color: var(--accent); color: var(--p-bg, var(--ink)); }
 .dis-soon { padding: 0.55rem 1rem; border: 1px dashed currentColor; border-radius: 999px; opacity: 0.8; }
 
 .dis-visual-link { position: absolute; inset: 0; z-index: 2; display: block; }
 .visual { position: absolute; inset: 0; pointer-events: none; }
 
-/* Photo: foto bertumpuk dengan ukuran dan kedalaman berbeda */
-.ph { position: absolute; z-index: 2; will-change: transform; }
-.ph-img { display: block; width: 100%; height: auto; box-shadow: 0 28px 60px rgba(0, 0, 0, 0.28); }
-.ph-1 { right: 9vw; top: 15svh; width: 24vw; }
-.ph-2 { right: 33vw; top: 30svh; width: 14vw; z-index: 3; }
-.ph-3 { right: 4vw; bottom: 9svh; width: 27vw; z-index: 4; }
-.ph-4 { right: 44vw; top: 12svh; width: 11vw; }
+/* Photo: cetakan bertumpuk (bahasa yang sama dengan halaman Photo). Ukuran dihitung eksplisit dari rasio foto:
+   tinggi dibatasi svh, lebar dibatasi vw, jadi cetakan selalu muat utuh di layar */
+.wk-print {
+  --h: min(var(--max-h), calc(var(--max-w) / var(--r)));
+  position: absolute; z-index: 2; height: var(--h); width: calc(var(--h) * var(--r)); will-change: transform;
+  border: clamp(4px, 0.55vw, 8px) solid #fbf9f5; background: #fbf9f5;
+  box-shadow: 0 1.6rem 2.6rem -1.2rem rgb(0 0 0 / 0.4), 0 0.3rem 0.7rem rgb(0 0 0 / 0.14);
+}
+.wk-print img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.wk-print-1 { --max-h: 56svh; --max-w: 24vw; right: 12vw; top: 16svh; rotate: 3deg; }
+.wk-print-2 { --max-h: 34svh; --max-w: 15vw; right: 38vw; top: 30svh; rotate: -5deg; z-index: 3; }
+.wk-print-3 { --max-h: 34svh; --max-w: 26vw; right: 5vw; bottom: 12svh; rotate: -3deg; z-index: 4; }
+.wk-print-4 { --max-h: 30svh; --max-w: 12vw; right: 50vw; top: 14svh; rotate: 6deg; }
 
 /* Video: dua pita film berlawanan arah (placeholder dari foto reel) */
 .film { position: absolute; right: 4vw; top: -15svh; width: 38vw; height: 135svh; display: flex; gap: 1.6vw; transform: rotate(-9deg); z-index: 2; }
@@ -300,21 +306,25 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .film-ring svg { display: block; width: 100%; height: 100%; animation: ring-pulse 3.2s ease-in-out infinite; }
 @keyframes ring-pulse { 50% { transform: scale(1.08); opacity: 0.7; } }
 
-/* Design: tile feed bertipografi dari nama brand di CV (teaser sampai karya masuk) */
-.fd { position: absolute; z-index: 2; aspect-ratio: 4 / 5; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(0.6rem, 1.1vw, 1.1rem); will-change: transform; }
-.fd-name { font-weight: 800; text-transform: uppercase; letter-spacing: -0.04em; line-height: 0.9; font-size: clamp(0.95rem, 1.7vw, 1.7rem); overflow-wrap: anywhere; }
-.fd-idx { opacity: 0.6; }
-.fd-1, .fd-4 { background: var(--p-fg); color: var(--p-bg); }
-.fd-2, .fd-5 { border: 1px solid currentColor; }
-.fd-3 { background: rgba(5, 5, 5, 0.08); }
-.fd-1 { right: 9vw; top: 15svh; width: 15vw; }
-.fd-2 { right: 26vw; top: 30svh; width: 13vw; z-index: 3; }
-.fd-3 { right: 4vw; bottom: 9svh; width: 17vw; z-index: 4; }
-.fd-4 { right: 40vw; top: 12svh; width: 11vw; }
-.fd-5 { right: 22vw; bottom: 8svh; width: 12vw; }
+/* Design: HP dengan feed yang berjalan sendiri; tile bertipografi dari nama brand di CV (teaser sampai karya masuk) */
+.wk-phone {
+  --h: min(72svh, 62vw);
+  position: absolute; z-index: 2; right: 16vw; top: 14svh; height: var(--h); width: calc(var(--h) * 0.49); rotate: -3deg; will-change: transform;
+  padding: clamp(5px, 0.6vw, 9px); border-radius: calc(var(--h) * 0.075); background: var(--p-fg);
+  box-shadow: 0 2rem 3.2rem -1.4rem rgb(0 0 0 / 0.45);
+}
+.wk-screen { position: relative; height: 100%; overflow: hidden; border-radius: calc(var(--h) * 0.062); background: var(--p-bg); container-type: inline-size; }
+.wk-feed { animation: feed-roll 28s linear infinite; will-change: transform; }
+@keyframes feed-roll { to { transform: translateY(-50%); } }
+.wk-post { display: flex; flex-direction: column; justify-content: space-between; aspect-ratio: 4 / 5; margin-bottom: 4px; padding: 7cqw; }
+.wk-post-name { font-weight: 800; text-transform: uppercase; letter-spacing: -0.04em; line-height: 0.9; font-size: 15cqw; overflow-wrap: anywhere; }
+.wk-post-idx { font-size: 5cqw; opacity: 0.6; }
+.wk-post-1, .wk-post-4 { background: var(--p-fg); color: var(--p-bg); }
+.wk-post-2, .wk-post-5 { box-shadow: inset 0 0 0 1px currentColor; }
+.wk-post-3 { background: rgba(5, 5, 5, 0.08); }
 
 @media (prefers-reduced-motion: reduce) {
-  .film-track, .film-ring svg { animation: none; }
+  .film-track, .film-ring svg, .wk-feed { animation: none; }
 }
 
 /* ---------- Reel ---------- */
@@ -459,16 +469,13 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   .hero-foot { flex-direction: column; align-items: flex-start; }
   .dis-title { bottom: 11svh; font-size: clamp(4rem, 24vw, 9rem); }
   .dis-info { top: auto; bottom: 4svh; left: var(--pad); right: var(--pad); display: flex; justify-content: space-between; align-items: center; }
-  .ph-1 { right: 6vw; top: 17svh; width: 44vw; }
-  .ph-2 { right: auto; left: 6vw; top: 30svh; width: 28vw; }
-  .ph-3 { right: 5vw; bottom: 22svh; width: 56vw; }
-  .ph-4 { display: none; }
+  .wk-print-1 { --max-h: 38svh; --max-w: 46vw; right: 7vw; top: 15svh; }
+  .wk-print-2 { --max-h: 26svh; --max-w: 30vw; right: auto; left: 6vw; top: 30svh; }
+  .wk-print-3 { --max-h: 24svh; --max-w: 58vw; right: 5vw; bottom: 22svh; }
+  .wk-print-4 { display: none; }
   .film { right: -6vw; top: -10svh; width: 58vw; }
   .film-ring { left: calc(70vw - var(--ring) / 2); }
-  .fd-1 { right: 6vw; top: 17svh; width: 34vw; }
-  .fd-2 { right: auto; left: 6vw; top: 30svh; width: 28vw; }
-  .fd-3 { right: 5vw; bottom: 24svh; width: 38vw; }
-  .fd-4, .fd-5 { display: none; }
+  .wk-phone { --h: min(54svh, 100vw); right: 9vw; top: 16svh; }
   .about-side, .about-note { grid-column: 1 / -1; grid-row: auto; }
   .contact-main, .channels { grid-column: 1 / -1; }
   .about-statement .word:first-child { margin-left: 0; }

@@ -49,7 +49,7 @@ export const site = {
 
   // Tiga disiplin (panggung di section Work). Punya halaman sendiri kalau `categories[slug]` berisi foto/karya.
   // status: "soon" = belum ada karya: tampil di panggung tapi belum bisa dibuka.
-  // visual: "photos" (pakai `images`) | "film" (pita dari site.reel.frames) | "feed" (tile bertipografi dari brand di `journey`)
+  // visual: "photos" (pakai `images`) | "film" (pita dari site.reel.frames) | "feed" (HP dengan feed tile bertipografi dari brand di `journey`)
   works: [
     { slug: "photo", title: "Photo", kind: "Product · Portrait · Lifestyle", visual: "photos", images: [{ src: "/work/tzuyu-skincare/hero.webp", width: 1332, height: 1996 }, { src: "/work/bintang-zero/final.webp", width: 745, height: 1323 }, { src: "/work/tzuyu-skincare/11.webp", width: 1707, height: 1138 }, { src: "/work/tzuyu-skincare/02.webp", width: 798, height: 1198 }], href: "#work" },
     { slug: "video", title: "Video", kind: "Shoot · Edit · Grade", visual: "film" },
