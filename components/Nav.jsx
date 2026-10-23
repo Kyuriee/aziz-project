@@ -41,7 +41,8 @@ export default function Nav() {
 
   /* ---------- Smart hide: turun saat scroll ke atas, naik saat scroll ke bawah ---------- */
   const setHidden = useCallback((hide) => {
-    if (hidden.current === hide) return;
+    // Saat pindah halaman, Next menggulung ke atas sebelum Nav selesai dilepas; header sudah null di titik itu
+    if (!header.current || hidden.current === hide) return;
     hidden.current = hide;
     gsap.to(header.current, { yPercent: hide ? -120 : 0, duration: 0.7, ease: "expo.out" });
   }, []);
