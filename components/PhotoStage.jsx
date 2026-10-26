@@ -18,50 +18,57 @@ const chapters = photoChapters();
 
 const SCREENS_PER_FRAME = 0.65; // jarak scroll (tinggi layar) untuk melempar satu foto
 const HOLD = 0.5; // jeda di foto terakhir, dalam satuan foto
+const runOf = (frames) => (frames - 1 + HOLD) * SCREENS_PER_FRAME; // panjang scroll satu bab, dalam tinggi layar
 
 // Miring dan arah lempar tetap per foto (bukan acak), jadi hasil server dan klien sama
 const tiltOf = (i) => ((i * 37) % 7 - 3) * 0.9;
 const sideOf = (i) => (i % 2 ? 1 : -1);
 
-/** Satu bab = satu brand: foto bertumpuk seperti cetakan di atas meja berwarna brand; scroll melempar cetakan teratas. */
+/**
+ * Satu bab = satu brand: foto bertumpuk seperti cetakan di atas meja berwarna brand; scroll melempar cetakan teratas.
+ * Struktur: section tinggi (panjang scroll bab) berisi satu layar sticky. Sticky (bukan pin ScrollTrigger) supaya
+ * tinggi layar ikut toolbar Chrome HP yang naik-turun; pin mengunci tinggi dalam piksel dan meninggalkan strip kosong.
+ */
 function Chapter({ chapter, first, still, onOpen }) {
   const { brand, frames } = chapter;
   const { palette } = brand;
-  const style = { "--p-bg": palette.bg, "--p-fg": palette.fg, "--p-acc": palette.accent };
+  const style = { "--p-bg": palette.bg, "--p-fg": palette.fg, "--p-acc": palette.accent, "--run": runOf(frames.length) };
 
   return (
     <section className={`pt-chapter${still ? " is-still" : ""}`} style={style} aria-label={brand.name}>
-      <p className="pt-name" aria-hidden="true">{brand.name}</p>
+      <div className="pt-sticky">
+        <p className="pt-name" aria-hidden="true">{brand.name}</p>
 
-      <div className="pt-stack">
-        {frames.map((frame, i) => (
-          <div className="pt-print" style={{ "--i": i, "--r": frame.width / frame.height }} key={frame.src}>
-            <img
-              src={frame.src}
-              width={frame.width}
-              height={frame.height}
-              alt={frame.alt}
-              loading={first && i === 0 ? "eager" : "lazy"}
-              fetchPriority={first && i === 0 ? "high" : undefined}
-              decoding="async"
-            />
-          </div>
-        ))}
-        {!still && <button type="button" className="pt-open" onClick={onOpen} data-cursor="View" aria-label={`View ${brand.name} photos`} />}
-      </div>
-
-      <div className="pt-foot">
-        <div className="pt-ticks" aria-hidden="true">
+        <div className="pt-stack">
           {frames.map((frame, i) => (
-            <i className={`pt-tick${i === 0 ? " is-on" : ""}`} key={frame.src} />
+            <div className="pt-print" style={{ "--i": i, "--r": frame.width / frame.height }} key={frame.src}>
+              <img
+                src={frame.src}
+                width={frame.width}
+                height={frame.height}
+                alt={frame.alt}
+                loading={first && i === 0 ? "eager" : "lazy"}
+                fetchPriority={first && i === 0 ? "high" : undefined}
+                decoding="async"
+              />
+            </div>
           ))}
+          {!still && <button type="button" className="pt-open" onClick={onOpen} data-cursor="View" aria-label={`View ${brand.name} photos`} />}
         </div>
-        <Link href={`/work/brand/${brand.slug}/`} className="pt-go" data-cursor="Open" aria-label={`Open ${brand.name}`}>
-          <ArrowUpRight />
-        </Link>
-      </div>
 
-      {first && <span className="scroll-cue pt-cue" aria-hidden="true"><i /></span>}
+        <div className="pt-foot">
+          <div className="pt-ticks" aria-hidden="true">
+            {frames.map((frame, i) => (
+              <i className={`pt-tick${i === 0 ? " is-on" : ""}`} key={frame.src} />
+            ))}
+          </div>
+          <Link href={`/work/brand/${brand.slug}/`} className="pt-go" data-cursor="Open" aria-label={`Open ${brand.name}`}>
+            <ArrowUpRight />
+          </Link>
+        </div>
+
+        {first && <span className="scroll-cue pt-cue" aria-hidden="true"><i /></span>}
+      </div>
     </section>
   );
 }
@@ -81,7 +88,7 @@ function Stage() {
 
   useEffect(() => {
     if (still) return;
-    ScrollTrigger.config({ ignoreMobileResize: true }); // bar alamat HP naik-turun tidak boleh menggeser pin
+    ScrollTrigger.config({ ignoreMobileResize: true }); // bar alamat HP naik-turun tidak perlu menghitung ulang posisi
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const cleanups = [];
 
@@ -103,10 +110,8 @@ function Stage() {
           scrollTrigger: {
             trigger: el,
             start: "top top",
-            end: () => `+=${total * SCREENS_PER_FRAME * window.innerHeight}`,
-            pin: true,
+            end: "bottom bottom", // layar sticky menempel sepanjang section; progres 0 → 1 = satu bab
             scrub: 0.6,
-            anticipatePin: 1,
             invalidateOnRefresh: true,
             onToggle: (self) => {
               el.classList.toggle("is-live", self.isActive);

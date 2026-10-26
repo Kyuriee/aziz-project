@@ -685,10 +685,15 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 /* Satu bab = satu layar yang di-pin; warna bab dari palet brand (--p-bg, --p-fg, --p-acc diisi inline). */
 .pt .nav.is-static { z-index: 60; background: transparent; border: 0; mix-blend-mode: difference; color: #fff; }
 
+/* Section setinggi panjang scroll bab (lvh = stabil, tidak ikut toolbar); layar sticky di dalamnya setinggi layar yang terlihat (dvh) */
 .pt-chapter {
-  position: relative; display: grid; place-items: center; height: 100vh; height: 100svh; min-height: 520px;
-  overflow: hidden; perspective: 1400px; background: var(--p-bg); color: var(--p-fg);
+  position: relative; background: var(--p-bg); color: var(--p-fg);
+  height: calc(100vh * (1 + var(--run))); height: calc(100lvh * (1 + var(--run)));
   --stack-w: min(88vw, 62rem); --stack-h: min(72svh, 56rem); /* kotak tempat tumpukan; ukuran cetakan dihitung dari sini */
+}
+.pt-sticky {
+  position: sticky; top: 0; display: grid; place-items: center; height: 100vh; height: 100dvh; min-height: 520px;
+  overflow: hidden; perspective: 1400px;
 }
 .pt-chapter ::selection { background: var(--p-fg); color: var(--p-bg); }
 
@@ -743,7 +748,8 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .pt-rail button[aria-current="true"] i { height: 22px; background: currentColor; }
 
 /* Reduced motion: tanpa pin, tiap bab jadi baris foto yang digeser menyamping */
-.pt-chapter.is-still { display: block; height: auto; min-height: 100svh; padding: 6rem 0 3rem; overflow: visible; perspective: none; }
+.pt-chapter.is-still { height: auto; min-height: 100svh; padding: 6rem 0 3rem; }
+.is-still .pt-sticky { position: static; display: block; height: auto; min-height: 0; overflow: visible; perspective: none; }
 .is-still .pt-name { position: static; translate: none; display: block; margin-bottom: 1.5rem; padding: 0 var(--pad); font-size: clamp(3rem, 14vw, 9rem); }
 .is-still .pt-stack { display: flex; gap: 1rem; width: auto; height: auto; padding: 0 var(--pad); overflow-x: auto; scroll-snap-type: x mandatory; }
 .is-still { --stack-w: calc(100vw - 2.5rem); --stack-h: 62svh; }
