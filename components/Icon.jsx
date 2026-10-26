@@ -119,3 +119,31 @@ export function SocialIcon({ name, size = "1em" }) {
     </svg>
   );
 }
+
+/* Ikon platform dan format untuk halaman Design */
+export function Instagram({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17" cy="7" r="0.8" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function FormatFeed({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <rect x="4" y="4" width="16" height="16" />
+    </svg>
+  );
+}
+
+export function FormatStory({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <rect x="6.5" y="2.5" width="11" height="19" rx="2.5" />
+      <path d="M9 6h6" strokeLinecap="round" />
+    </svg>
+  );
+}

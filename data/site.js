@@ -49,11 +49,11 @@ export const site = {
 
   // Tiga disiplin (panggung di section Work). Punya halaman sendiri kalau `categories[slug]` berisi foto/karya.
   // status: "soon" = belum ada karya: tampil di panggung tapi belum bisa dibuka.
-  // visual: "photos" (pakai `images`) | "film" (pita dari site.reel.frames) | "feed" (HP dengan feed tile bertipografi dari brand di `journey`)
+  // visual: "photos" (pakai `images`) | "film" (pita dari site.reel.frames) | "feed" (HP dengan feed dari karya Design; kalau belum ada, tile bertipografi dari brand di `journey`)
   works: [
     { slug: "photo", title: "Photo", kind: "Product · Portrait · Lifestyle", visual: "photos", images: [{ src: "/work/tzuyu-skincare/hero.webp", width: 1332, height: 1996 }, { src: "/work/bintang-zero/final.webp", width: 745, height: 1323 }, { src: "/work/tzuyu-skincare/11.webp", width: 1707, height: 1138 }, { src: "/work/tzuyu-skincare/02.webp", width: 798, height: 1198 }], href: "#work" },
     { slug: "video", title: "Video", kind: "Shoot · Edit · Grade", visual: "film" },
-    { slug: "design", title: "Design", kind: "Layout · Identity · Social", visual: "feed", status: "soon", href: "#work" },
+    { slug: "design", title: "Design", kind: "Feed · Story · Banner", visual: "feed" },
   ],
 
   // Reel: foto-foto ini berganti mengikuti scroll (pakai file di public/)
@@ -110,7 +110,7 @@ export const categories = {
     palette: { bg: "#f3f3f1", fg: "#050505", mute: "#6b6b67", line: "rgba(5, 5, 5, 0.18)", accent: "#050505" },
     hero: { src: "/work/tzuyu-skincare/hero.webp", width: 1332, height: 1996, alt: "Model with eyes closed holding a pink bottle against her cheek in a white sleeveless top" },
     shots: [], // foto lepas tanpa brand (kosong: semua foto sudah milik brand dan otomatis ikut ke halaman Photo)
-    layout: "gallery", // halaman galeri dengan filter brand; tanpa ini, halaman disiplin berupa daftar brand
+    layout: "gallery", // halaman Photo (tumpukan cetakan per brand); layout lain: "feed" (Design); tanpa layout = halaman Video
   },
   video: {
     title: ["Video", "Selected films"],
@@ -119,6 +119,10 @@ export const categories = {
     palette: { bg: "#050505", fg: "#f3f3f1", mute: "#8c8c88", line: "rgba(243, 243, 241, 0.16)", accent: "#f3f3f1" },
   },
   design: {
+    title: ["Design", "Selected work"],
+    kind: "Feed · Story · Banner",
+    brief: "Made to be scrolled.",
+    layout: "feed", // halaman Design: HP yang di-scroll + rel per brand, per platform dan format
     palette: { bg: "#d6d6d2", fg: "#050505", mute: "#55554f", line: "rgba(5, 5, 5, 0.2)", accent: "#050505" },
   },
 };
@@ -134,6 +138,13 @@ const shots = (dir, name, files) =>
   files.map(([file, width, height, alt]) => ({ src: `/work/${dir}/${file}.webp`, width, height, alt: alt ?? `${name}, photo ${file}` }));
 
 // Brand dari CV yang karyanya belum masuk: halaman dan linknya otomatis aktif begitu `photo`/`video`/`design` diisi
+// Karya Design: bentuknya sama dengan `shots`, ditambah `channel` (platform) dan `format` (jenis konten di platform itu).
+// Platform dan format yang dikenal halaman Design ada di DESIGN_CHANNELS; tambahkan di sana kalau ada yang baru.
+const designShots = (dir, name, channel, format, files) =>
+  files.map(([file, width, height, alt]) => ({
+    src: `/work/${dir}/${file}.webp`, width, height, alt: alt ?? `${name}, ${channel} ${format} ${file}`, channel, format,
+  }));
+
 const pending = (slug, name) => ({ slug, name, photo: [], video: [], design: [] });
 
 export const brands = [
@@ -224,7 +235,68 @@ export const brands = [
   },
   // Dari CV (assets menyusul)
   pending("fitnation", "FitNation"),
-  pending("starphone-semarang", "Starphone Semarang"),
+  {
+    slug: "starphone-semarang",
+    // Palet dari feed Starphone: hitam hangat + kuning toko
+    palette: { bg: "#0e0b05", fg: "#f4e9c8", mute: "#9b8d68", line: "rgba(244, 233, 200, 0.18)", accent: "#f0b020" },
+    name: "Starphone Semarang",
+    photo: [],
+    video: [],
+    design: [
+      ...designShots("starphone-semarang", "Starphone Semarang", "instagram", "feed", [
+      ["feed-01", 851, 851, "New iPhone 14 Pro Max announcement with large NEW lettering"],
+      ["feed-02", 689, 689, "Lock screen refresh rate tips on a yellow background"],
+      ["feed-03", 976, 976, "iOS 16.2 update post about the AirDrop Everyone setting"],
+      ["feed-04", 694, 694, "Always On Display on iPhone 14 Pro and battery drain"],
+      ["feed-05", 1080, 1080, "AirPods product post with floating earbuds"],
+      ["feed-06", 614, 614, "Meme about mirror selfies with a cat and an iPhone"],
+      ["feed-07", 1080, 1080, "Apple Watch price list post"],
+      ["feed-08", 659, 659, "Meme about a mirror selfie with a cat in sunglasses"],
+      ["feed-09", 903, 903, "Cashback promo post with up to 200 thousand rupiah back"],
+      ["feed-10", 517, 517, "Which iPhone generation is your favorite, with a tech founder portrait"],
+      ["feed-11", 1019, 1019, "Merry Christmas greeting with a snowy tree"],
+      ["feed-12", 480, 480, "New and second iPhone 11 ready stock on black"],
+      ["feed-13", 994, 994, "World Cup score prediction contest, Argentina versus France"],
+      ["feed-14", 479, 479, "Yellow iPhone 14 and 14 Plus announcement"],
+      ["feed-15", 1080, 1080, "iOS 17 update news post"],
+      ["feed-16", 718, 718, "iPhone 14 series teaser on a dark background"],
+      ["feed-17", 1080, 1080, "iPad mini 6 product post"],
+      ["feed-18", 869, 869, "Is there an iPhone 16 teaser on yellow"],
+      ["feed-19", 1030, 1030, "iPad price list with colorful iPads"],
+      ["feed-20", 869, 869, "Meme about the iPhone 16 with a man holding a purple phone"],
+      ["feed-21", 1080, 1080, "iPhone 14 Pro lineup with gold lettering"],
+      ["feed-22", 813, 813, "Do you believe this, a man in a cap holding a phone"],
+      ["feed-23", 1080, 1080, "iPhone XR post with huge XR lettering"],
+      ["feed-24", 578, 578, "Isra Miraj greeting with a mosque silhouette"],
+      ["feed-25", 984, 984, "Happy New Year 2023 greeting in gold"],
+      ["feed-26", 643, 643, "Reasons to choose the iPhone 11"],
+      ["feed-27", 1080, 1080, "Mock iPhone reminder alert post"],
+      ["feed-28", 941, 941, "Meme about choosing between iPhone models with a surprised child"],
+      ["feed-29", 612, 612, "How to care for an iPhone, tips post"],
+      ["feed-30", 802, 802, "Why choose the iPhone 11, with colorful phones"],
+      ["feed-31", 734, 734, "We are hiring a shopkeeper, job post"],
+      ["feed-32", 439, 439, "Promo sale price list for iPhone 14 series and iPhone 11"],
+      ["feed-33", 594, 594, "How to care for an iPhone, tips post in yellow"],
+      ["feed-34", 595, 595, "Happy Valentine's Day post with a glowing heart"],
+      ]),
+      ...designShots("starphone-semarang", "Starphone Semarang", "instagram", "story", [
+      ["story-01", 784, 1394, "Ready stock story for the iPhone 13 Pro Max series"],
+      ["story-02", 512, 909, "Storefront story with a greeting message"],
+      ["story-03", 516, 918, "Ready stock iPhone 11 series on a white desk"],
+      ["story-04", 349, 620, "Merry Christmas story with a decorated tree"],
+      ["story-05", 632, 1130, "Thank you 2022 story with a clock and champagne glasses"],
+      ["story-06", 514, 914, "Happy New Year 2023 story with a clock"],
+      ["story-07", 729, 1296, "Ready stock second-hand iPhone Plus story with a phone in hand"],
+      ["story-08", 1080, 1920, "Ready stock iPhone 11 story with a hand and floating phones"],
+      ["story-09", 359, 638, "Ready stock iPhone 11 Pro story, close-up of the camera"],
+      ["story-10", 534, 948, "Ready stock story with a black camera lens close-up"],
+      ["story-11", 376, 669, "New iPhone 14 story held in hands above clouds"],
+      ["story-12", 648, 1151, "New iPhone 14 Pro story on a purple gradient"],
+      ["story-13", 713, 1268, "Ready stock yellow iPhone 11 held in a hand"],
+      ["story-14", 487, 865, "Ready stock iPhone 11 Pro Max on a wooden table"],
+      ]),
+    ],
+  },
   pending("salwa-official", "Salwa Official"),
   pending("disdikbud-kalbar", "Dinas Pendidikan dan Kebudayaan Kalimantan Barat"),
   pending("cantik-clinic", "Cantik Clinic"),
@@ -271,3 +343,34 @@ export const photoChapters = () =>
 
 // Semua video lintas brand untuk gallery Video
 export const videoGallery = () => brands.flatMap((b) => b.video.map((v) => ({ ...v, brand: b.slug })));
+
+// Urutan tampil di halaman Design: platform, lalu format di dalamnya. Karya `design` harus punya `channel` dan `format` dari daftar ini.
+export const DESIGN_CHANNELS = [
+  { slug: "instagram", title: "Instagram", formats: ["ads", "feed", "highlight", "story"] },
+  { slug: "shopee", title: "Shopee", formats: ["banner", "bundle"] },
+];
+
+// Karya Design satu brand dikelompokkan per platform dan format; tiap karya membawa slug brand-nya (untuk Lightbox)
+export const designGroups = (brand) =>
+  DESIGN_CHANNELS.flatMap(({ slug: channel, formats }) =>
+    formats
+      .map((format) => ({
+        channel,
+        format,
+        items: brand.design.filter((d) => d.channel === channel && d.format === format).map((d) => ({ ...d, brand: brand.slug })),
+      }))
+      .filter((g) => g.items.length)
+  );
+
+// Bab halaman Design: satu brand = satu bab berisi rel per format
+export const designChapters = () => brands.filter((b) => b.design.length).map((brand) => ({ brand, groups: designGroups(brand) }));
+
+// Contoh feed lintas brand (bergantian per brand), untuk HP di beranda dan pembuka halaman Design
+export const designSamples = (count) => {
+  const pools = designChapters().map(({ groups }) => groups.find((g) => g.format === "feed")?.items ?? []);
+  const out = [];
+  for (let i = 0; out.length < count && pools.some((p) => i < p.length); i++) {
+    pools.forEach((p) => p[i] && out.length < count && out.push(p[i]));
+  }
+  return out;
+};

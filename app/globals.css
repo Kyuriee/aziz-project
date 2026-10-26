@@ -316,6 +316,7 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .wk-screen { position: relative; height: 100%; overflow: hidden; border-radius: calc(var(--h) * 0.062); background: var(--p-bg); }
 .wk-feed { animation: feed-roll 28s linear infinite; will-change: transform; }
 @keyframes feed-roll { to { transform: translateY(-50%); } }
+.wk-post-img { display: block; width: 100%; height: auto; aspect-ratio: 1; margin-bottom: 4px; object-fit: cover; }
 .wk-post { display: flex; flex-direction: column; justify-content: space-between; aspect-ratio: 4 / 5; margin-bottom: 4px; padding: calc(var(--h) * 0.032); }
 .wk-post-name { font-weight: 800; text-transform: uppercase; letter-spacing: -0.04em; line-height: 0.9; font-size: calc(var(--h) * 0.067); overflow-wrap: anywhere; }
 .wk-post-idx { font-size: calc(var(--h) * 0.022); opacity: 0.6; }
@@ -755,3 +756,74 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
 .is-still { --stack-w: calc(100vw - 2.5rem); --stack-h: 62svh; }
 .is-still .pt-print { flex: none; scroll-snap-align: center; transform: none; }
 .is-still .pt-foot { position: static; margin-top: 1.5rem; }
+
+/* ---------- Halaman Design: feed yang di-scroll, lalu rel per brand ---------- */
+/* Pembuka: layar sticky berisi HP; feed di dalamnya digerakkan GSAP mengikuti scroll. Tiap brand = satu bab berwarna palet brand. */
+.ds .nav.is-static { z-index: 60; background: transparent; border: 0; mix-blend-mode: difference; color: #fff; }
+
+.ds-intro { position: relative; height: calc(100vh * 2); height: calc(100lvh * 2); background: var(--p-bg); color: var(--p-fg); }
+.ds-intro.is-still { height: auto; }
+.ds-intro-sticky { position: sticky; top: 0; display: grid; place-items: center; height: 100vh; height: 100dvh; min-height: 520px; overflow: hidden; }
+.ds-word {
+  position: absolute; left: 0; top: 50%; translate: 0 -50%; white-space: nowrap; pointer-events: none; will-change: transform;
+  font-family: var(--sans-outline); font-weight: 800; text-transform: uppercase; letter-spacing: -0.045em; line-height: 0.8;
+  font-size: clamp(7rem, 34vw, 34rem); color: transparent; -webkit-text-stroke: 1.5px var(--p-fg);
+}
+.ds-phone {
+  --h: min(76svh, 64vw);
+  position: relative; height: var(--h); width: calc(var(--h) * 0.49); padding: clamp(5px, 0.6vw, 9px); border-radius: calc(var(--h) * 0.075);
+  background: var(--p-fg); box-shadow: 0 2.4rem 3.6rem -1.4rem rgb(0 0 0 / 0.45); will-change: transform;
+}
+.ds-screen { height: 100%; overflow: hidden; border-radius: calc(var(--h) * 0.062); background: var(--p-bg); }
+.ds-feed { will-change: transform; }
+.ds-feed img { display: block; width: 100%; height: auto; aspect-ratio: 1; margin-bottom: 4px; object-fit: cover; }
+.ds-cue { position: absolute; left: 50%; bottom: clamp(1.1rem, 3vh, 2rem); translate: -50% 0; transition: opacity 0.5s var(--ease); }
+.ds-cue.is-off { opacity: 0; }
+
+.ds-chapter { padding: clamp(4rem, 12svh, 9rem) 0 clamp(4rem, 10svh, 8rem); background: var(--p-bg); color: var(--p-fg); }
+.ds-chapter ::selection { background: var(--p-fg); color: var(--p-bg); }
+.ds-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; padding: 0 var(--pad); margin-bottom: clamp(2rem, 6svh, 4rem); }
+.ds-name {
+  margin: 0; font-family: var(--sans-outline); font-weight: 800; text-transform: uppercase; letter-spacing: -0.045em; line-height: 0.85;
+  font-size: clamp(3.2rem, 12vw, 12rem); color: transparent;
+  -webkit-text-stroke: 1px var(--p-fg); /* cadangan untuk browser tanpa color-mix */
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--p-fg) 60%, transparent);
+}
+.ds-go {
+  flex: none; display: grid; place-items: center; width: 3rem; height: 3rem; font-size: 1.2rem; border: 1px solid currentColor; border-radius: 50%;
+  transition: background-color 0.5s var(--ease), color 0.5s var(--ease);
+}
+.ds-go:hover, .ds-go:focus-visible { background: var(--p-fg); color: var(--p-bg); }
+
+.ds-group + .ds-group { margin-top: clamp(3rem, 8svh, 5.5rem); }
+.ds-label { display: flex; align-items: center; gap: 0.75rem; padding: 0 var(--pad); margin-bottom: 1rem; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.ds-label-icons { display: inline-flex; gap: 0.35rem; font-size: 1.1rem; }
+.ds-label-count { opacity: 0.55; }
+.ds-arrows { display: flex; gap: 0.5rem; margin-left: auto; }
+.ds-arrow {
+  display: grid; place-items: center; width: 2.5rem; height: 2.5rem; font-size: 1rem; color: inherit; background: none; border: 1px solid currentColor; border-radius: 50%; cursor: pointer;
+  transition: background-color 0.4s var(--ease), color 0.4s var(--ease);
+}
+.ds-arrow:hover, .ds-arrow:focus-visible { background: var(--p-fg); color: var(--p-bg); }
+@media (hover: none) { .ds-arrows { display: none; } } /* di layar sentuh cukup digeser */
+
+/* Rel horizontal: sentuh, drag mouse, atau panah. Ukuran item dari rasio asli karya (tinggi eksplisit, lebar = tinggi x rasio) */
+.ds-rail {
+  display: flex; gap: clamp(0.75rem, 1.4vw, 1.25rem); padding: 0 var(--pad); overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity; scroll-padding-inline: var(--pad); scrollbar-width: none; cursor: grab;
+}
+.ds-rail::-webkit-scrollbar { display: none; }
+.ds-rail.is-drag { cursor: grabbing; scroll-snap-type: none; }
+.ds-rail::after { content: ""; flex: none; width: 1px; } /* ruang di ujung kanan */
+.ds-item {
+  --h: min(30rem, 68svh, 78vw);
+  flex: none; height: var(--h); width: calc(var(--h) * var(--r)); padding: 0; overflow: hidden; scroll-snap-align: start;
+  background: var(--p-line); border: 0; border-radius: 0.5rem; cursor: pointer;
+}
+.ds-rail[data-format="story"] .ds-item { --h: min(40rem, 70svh, 118vw); border-radius: 0.9rem; }
+.ds-item img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: scale 0.9s var(--ease); }
+.ds-item:hover img, .ds-item:focus-visible img { scale: 1.03; }
+
+/* Penanda posisi rel: lebar = bagian yang terlihat, geser = posisi scroll */
+.ds-progress { position: relative; height: 2px; margin: 1.25rem var(--pad) 0; background: var(--p-line); }
+.ds-progress i { position: absolute; inset: 0 auto 0 calc(var(--p, 0) * (100% - var(--w, 100%))); width: var(--w, 100%); background: var(--p-acc); }

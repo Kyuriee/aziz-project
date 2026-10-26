@@ -8,9 +8,9 @@ import SmoothScroll, { useLenis } from "./SmoothScroll";
 import Cursor from "./Cursor";
 import CaseNav from "./CaseNav";
 import Lightbox from "./Lightbox";
-import Roll from "./Roll";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "./Icon";
-import { photoChapters, site } from "@/data/site";
+import CaseFooter from "./CaseFooter";
+import { ArrowUpRight } from "./Icon";
+import { photoChapters } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -202,7 +202,7 @@ function Stage() {
         </nav>
       )}
 
-      <Footer />
+      <CaseFooter slug="photo" />
 
       {open && (
         <Lightbox
@@ -213,34 +213,6 @@ function Stage() {
         />
       )}
     </div>
-  );
-}
-
-// Project berikutnya (berputar), dan jalan kembali ke Work
-function Footer() {
-  const projects = site.works.filter((w) => w.slug && w.status !== "soon");
-  const at = projects.findIndex((w) => w.slug === "photo");
-  const next = projects.length > 1 ? projects[(at + 1) % projects.length] : null;
-
-  return (
-    <footer className="case-foot">
-      {next && (
-        <Link href={`/work/${next.slug}/`} className="case-next" data-cursor="Next">
-          <span className="case-next-label mono">Next project</span>
-          <span className="case-next-title">
-            {next.title} <ArrowRight />
-          </span>
-          <span className="case-next-meta mono">{next.kind} — {next.year}</span>
-        </Link>
-      )}
-      <div className="case-foot-row mono">
-        <Link href="/#work" className="case-back" data-cursor="Back">
-          <ArrowLeft />
-          <Roll>All work</Roll>
-        </Link>
-        <p>© {site.year} {site.name}</p>
-      </div>
-    </footer>
   );
 }
 

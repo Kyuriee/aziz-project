@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation";
 import DisciplinePage from "@/components/DisciplinePage";
 import PhotoStage from "@/components/PhotoStage";
+import DesignStage from "@/components/DesignStage";
 import { brandsWith, categories, site } from "@/data/site";
+
+// Layout khusus per disiplin; tanpa layout = halaman Video
+const STAGES = { gallery: PhotoStage, feed: DesignStage };
 
 // Halaman dibuat hanya untuk disiplin yang sudah punya karya: galeri sendiri (shots) atau brand yang memuatnya
 const hasWork = (slug, c) => c.shots?.length || brandsWith(slug).length;
@@ -28,5 +32,6 @@ export default async function WorkPage({ params }) {
   const { slug } = await params;
   const item = categories[slug];
   if (!item || !hasWork(slug, item)) notFound();
-  return item.layout === "gallery" ? <PhotoStage /> : <DisciplinePage data={item} />;
+  const Stage = STAGES[item.layout];
+  return Stage ? <Stage /> : <DisciplinePage data={item} />;
 }

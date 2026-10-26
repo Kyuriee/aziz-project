@@ -35,5 +35,8 @@ Tiap brand di CV sudah punya slug di `brands` (`data/site.js`) dengan `photo/vid
 ## Tambah foto ke Photo
 Foto selalu milik sebuah brand: taruh di `public/work/<slug-brand>/` (pakai `npm run images -- <slug>`) dan tambahkan ke `photo` brand itu di `brands`. Halaman `/work/photo` (`components/PhotoStage.jsx`) membuat satu bab per brand yang punya foto: cover jadi foto pertama, lalu foto brand, bertumpuk seperti cetakan dan terlempar satu per satu saat scroll. Warna bab dari `palette` brand. Foto lepas tanpa brand: `categories.photo.shots` (belum ditampilkan di halaman Photo).
 
-## Aktifkan Video atau Design
-Isi `categories.video` (atau `design`) dengan `title`, `kind`, `role`, `brief`, `hero`, `shots`; lalu hapus `status: "soon"` di `site.works`. Palet `palette` sudah ada dan dipakai untuk efek warna saat hover di daftar Work.
+## Tambah karya Design
+Taruh gambar di `public/work/<slug-brand>/` dan daftarkan di `design` brand itu lewat `designShots(dir, nama, platform, format, files)` di `data/site.js`. Format nama file: `feed-01`, `story-01`, dst. Halaman `/work/design` membuat satu bab per brand dengan satu rel per platform dan format, urutannya dari `DESIGN_CHANNELS` (Instagram: ads, feed, highlight, story; Shopee: banner, bundle). Platform atau format baru: tambahkan ke `DESIGN_CHANNELS` dan ikonnya ke `CHANNEL_ICON` / `FORMAT_ICON` di `components/DesignStage.jsx`.
+
+## Aktifkan Video
+Isi `categories.video` dengan `title`, `kind`, `role`, `brief`; lalu hapus `status: "soon"` di `site.works` dan isi `video` brand yang punya karya video.

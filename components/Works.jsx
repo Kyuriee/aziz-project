@@ -5,7 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "./Icon";
-import { categories, journey, site } from "@/data/site";
+import { categories, designSamples, journey, site } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,20 +56,26 @@ function FilmVisual() {
   );
 }
 
-// Teaser Design: HP dengan feed yang jalan sendiri; tile bertipografi dari nama brand di CV (sampai karya masuk)
+// Teaser Design: HP dengan feed yang jalan sendiri, isinya karya Design nyata. Belum ada karya: tile bertipografi dari nama brand di CV
 function FeedVisual() {
+  const posts = designSamples(6);
   const tiles = journey.filter((j) => j.brand && j.company.length <= 20).slice(0, 5);
+  const loop = (list) => [...list, ...list];
   return (
     <div className="visual" aria-hidden="true">
       <div className="wk-phone" data-speed={DRIFT[1]}>
         <div className="wk-screen">
           <div className="wk-feed">
-            {[...tiles, ...tiles].map((j, k) => (
-              <div className={`wk-post wk-post-${(k % tiles.length) + 1}`} key={k}>
-                <span className="wk-post-idx mono">{pad((k % tiles.length) + 1)}</span>
-                <span className="wk-post-name">{j.company}</span>
-              </div>
-            ))}
+            {posts.length
+              ? loop(posts).map((post, k) => (
+                  <img className="wk-post-img" src={post.src} width={post.width} height={post.height} alt="" loading="lazy" decoding="async" key={k} />
+                ))
+              : loop(tiles).map((j, k) => (
+                  <div className={`wk-post wk-post-${(k % tiles.length) + 1}`} key={k}>
+                    <span className="wk-post-idx mono">{pad((k % tiles.length) + 1)}</span>
+                    <span className="wk-post-name">{j.company}</span>
+                  </div>
+                ))}
           </div>
         </div>
       </div>
