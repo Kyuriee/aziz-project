@@ -147,3 +147,91 @@ export function FormatStory({ size = "1em" }) {
     </svg>
   );
 }
+
+export function Tag({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7a1 1 0 0 1 .7.3l7.3 7.3a1 1 0 0 1 0 1.4l-7.7 7.7a1 1 0 0 1-1.4 0L3.8 12.9a1 1 0 0 1-.3-.7Z" />
+      <circle cx="8" cy="8" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function FormatBanner({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <rect x="2.5" y="7" width="19" height="10" />
+    </svg>
+  );
+}
+
+export function FormatProduct({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M5 8h14l-1 12H6Z" />
+      <path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
+    </svg>
+  );
+}
+
+export function FormatAds({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M4 10v4h3l7 4V6L7 10Z" />
+      <path d="M17.5 9.5a3.5 3.5 0 0 1 0 5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function FormatHighlight({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="12" r="5" />
+    </svg>
+  );
+}
+
+export function Shop({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M4 9.5 5.5 4h13L20 9.5" />
+      <path d="M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0" />
+      <path d="M5.5 12.5V20h13v-7.5" />
+    </svg>
+  );
+}
+
+export function Identity({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <circle cx="9" cy="12" r="5.5" />
+      <rect x="11.5" y="6.5" width="9" height="9" />
+    </svg>
+  );
+}
+
+export function FormatGreeting({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 8a4 4 0 0 1 7 2.4C19 15.6 12 20 12 20Z" />
+    </svg>
+  );
+}
+
+export function FormatBundle({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <rect x="3.5" y="9" width="11" height="11" />
+      <path d="M8 9V4.5h11.5V16H14.5" />
+    </svg>
+  );
+}
+
+export function FormatLogo({ size = "1em" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M12 3.5 20.5 12 12 20.5 3.5 12Z" />
+    </svg>
+  );
+}

@@ -9,7 +9,10 @@ import Cursor from "./Cursor";
 import CaseNav from "./CaseNav";
 import CaseFooter from "./CaseFooter";
 import Lightbox from "./Lightbox";
-import { ArrowLeft, ArrowRight, ArrowUpRight, FormatFeed, FormatStory, Instagram } from "./Icon";
+import {
+  ArrowLeft, ArrowRight, ArrowUpRight, FormatAds, FormatBanner, FormatBundle, FormatFeed, FormatGreeting, FormatHighlight,
+  FormatLogo, FormatProduct, FormatStory, Identity, Instagram, Shop, Tag,
+} from "./Icon";
 import { DESIGN_CHANNELS, categories, designChapters, designSamples } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -19,8 +22,11 @@ const samples = designSamples(8);
 const palette = categories.design.palette;
 
 // Ikon platform dan format; platform atau format baru: tambahkan di sini dan di DESIGN_CHANNELS (data/site.js)
-const CHANNEL_ICON = { instagram: Instagram };
-const FORMAT_ICON = { feed: FormatFeed, story: FormatStory };
+const CHANNEL_ICON = { identity: Identity, instagram: Instagram, shopee: Shop, promo: Tag };
+const FORMAT_ICON = {
+  ads: FormatAds, banner: FormatBanner, bundle: FormatBundle, feed: FormatFeed, greeting: FormatGreeting,
+  highlight: FormatHighlight, logo: FormatLogo, product: FormatProduct, story: FormatStory,
+};
 const titleOf = (slug) => slug.charAt(0).toUpperCase() + slug.slice(1);
 const channelTitle = (slug) => DESIGN_CHANNELS.find((c) => c.slug === slug)?.title ?? titleOf(slug);
 

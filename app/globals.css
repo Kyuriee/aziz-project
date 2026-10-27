@@ -820,6 +820,13 @@ a:hover .roll-in, .menu-btn:hover .roll-in { transform: translateY(-50%); }
   flex: none; height: var(--h); width: calc(var(--h) * var(--r)); padding: 0; overflow: hidden; scroll-snap-align: start;
   background: var(--p-line); border: 0; border-radius: 0.5rem; cursor: pointer;
 }
+.ds-rail[data-format="banner"] .ds-item { --h: min(18rem, 40svh, 44vw); } /* banner lebar: tinggi lebih kecil supaya tidak melebihi layar */
+/* Ads: banner dengan rasio beragam (sampai 4:1), jadi lebarnya sama dan tinggi mengikuti rasio; sejajar di tengah */
+.ds-rail[data-format="ads"] { align-items: center; }
+.ds-rail[data-format="ads"] .ds-item { height: auto; width: min(32rem, 82vw); aspect-ratio: var(--r); }
+/* Highlight: sampul bulat dengan cincin, seperti di profil Instagram */
+.ds-rail[data-format="highlight"] { padding-block: 0.5rem; }
+.ds-rail[data-format="highlight"] .ds-item { --h: min(11rem, 34vw); border-radius: 50%; box-shadow: 0 0 0 3px var(--p-bg), 0 0 0 4.5px var(--p-acc); }
 .ds-rail[data-format="story"] .ds-item { --h: min(40rem, 70svh, 118vw); border-radius: 0.9rem; }
 .ds-item img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: scale 0.9s var(--ease); }
 .ds-item:hover img, .ds-item:focus-visible img { scale: 1.03; }
